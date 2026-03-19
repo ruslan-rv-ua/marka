@@ -30,8 +30,8 @@ function changeFontSize(delta) {
 
 function changePadding(delta) {
   const current = parseFloat(getComputedStyle(root).getPropertyValue("--padding-x"));
-  const next = Math.min(128, Math.max(0, current + delta));
-  root.style.setProperty("--padding-x", `${next}px`);
+  const next = Math.min(25, Math.max(0, current + delta));
+  root.style.setProperty("--padding-x", `${next}%`);
 }
 
 async function renderFile(filePath, preloadedContent) {
@@ -81,10 +81,10 @@ document.addEventListener("keydown", async (e) => {
     changeFontSize(-1);
   } else if (e.ctrlKey && e.key === "[") {
     e.preventDefault();
-    changePadding(-8);
+    changePadding(-5);
   } else if (e.ctrlKey && e.key === "]") {
     e.preventDefault();
-    changePadding(8);
+    changePadding(5);
   } else if (e.key === "Escape") {
     getCurrentWindow().close();
   }

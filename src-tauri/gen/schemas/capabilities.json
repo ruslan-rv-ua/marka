@@ -1,1 +1,1 @@
-{"default":{"identifier":"default","description":"Default permissions for Marka","local":true,"windows":["main"],"permissions":["core:default","dialog:default","cli:default","core:event:default"]}}
+{"default":{"identifier":"default","description":"Default permissions for Marka","local":true,"windows":["main"],"permissions":["core:default","core:window:allow-close","dialog:default","cli:default","core:event:default"]}}

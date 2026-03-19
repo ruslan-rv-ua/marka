@@ -12,7 +12,7 @@
   --blockquote-border: #6cf;
   --blockquote-bg: #111;
   --font-size: 16px;
-  --padding-x: 32px;
+  --padding-x: 10%;
 }
 
 * {
@@ -30,8 +30,6 @@ html, body {
 }
 
 #content {
-  max-width: 800px;
-  margin: 0 auto;
   padding: 24px var(--padding-x);
   outline: none;
 }
