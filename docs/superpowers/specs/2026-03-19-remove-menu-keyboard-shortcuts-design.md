@@ -24,7 +24,10 @@ Marka uses a native Tauri menu. To access it, NVDA users must switch to focus mo
 - Menu-related imports from `tauri::menu`
 
 **Add:**
-- `open_file_dialog` Tauri command — opens native file dialog for .md files, reads the selected file, returns `{ path: String, content: String }` or an error. Replaces the menu "open" event flow.
+- `open_file_dialog` Tauri command — opens native file dialog for .md files using `dialog().file().add_filter("Markdown", &["md"]).blocking_pick_file()`. If user selects a file, reads it and returns `Some({ path: String, content: String })`. If user cancels the dialog, returns `None` (not an error). The frontend ignores `None` results silently.
+
+**Also remove:**
+- `Emitter` import (only used by the removed menu event handler)
 
 **Keep unchanged:**
 - `read_file` command
@@ -33,7 +36,7 @@ Marka uses a native Tauri menu. To access it, NVDA users must switch to focus mo
 
 ### JavaScript Changes (src/main.js)
 
-**Replace** the current `listen("open-file", ...)` event listener and separate Escape handler with a single `keydown` event router:
+**Replace** the current `listen("open-file", ...)` event listener and separate Escape handler with a single `keydown` event router. Remove the `listen` import from `@tauri-apps/api/event` (no longer used).
 
 | Shortcut | Action | Details |
 |----------|--------|---------|
@@ -51,8 +54,8 @@ Marka uses a native Tauri menu. To access it, NVDA users must switch to focus mo
 ### CSS Changes (src/styles.css)
 
 **Add** CSS custom properties on `:root`:
-- `--font-size: <current default value>` — used by body or #content for font-size
-- `--padding-x: <current default value>` — used by #content for left/right padding
+- `--font-size: 16px` (default, minimum `10px`) — replaces the hardcoded `16px` in the `html, body` rule with `font-size: var(--font-size)`. Headings use `em` units so they scale proportionally.
+- `--padding-x: 32px` (default, minimum `0px`, maximum `128px`) — used by `#content` for left/right padding
 
 **Update** existing rules to reference these custom properties instead of hardcoded values.
 
