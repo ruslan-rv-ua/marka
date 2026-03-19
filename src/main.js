@@ -25,7 +25,17 @@ async function renderFile(filePath) {
   try {
     const markdown = await invoke("read_file", { path: filePath });
     contentEl.innerHTML = marked.parse(markdown);
-    contentEl.focus();
+
+    // Make code blocks accessible for NVDA
+    contentEl.querySelectorAll("pre").forEach((pre) => {
+      pre.setAttribute("role", "region");
+      pre.setAttribute("aria-label", "Блок коду");
+      pre.setAttribute("tabindex", "0");
+    });
+
+    // Force NVDA browse mode by blurring and re-focusing the document container
+    contentEl.blur();
+    requestAnimationFrame(() => contentEl.focus());
 
     // Update window title
     const fileName = filePath.split(/[\\/]/).pop();
