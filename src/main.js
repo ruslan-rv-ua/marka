@@ -24,7 +24,7 @@ const root = document.documentElement;
 
 function changeFontSize(delta) {
   const current = parseFloat(getComputedStyle(root).getPropertyValue("--font-size"));
-  const next = Math.max(10, current + delta);
+  const next = Math.min(72, Math.max(10, current + delta));
   root.style.setProperty("--font-size", `${next}px`);
 }
 
@@ -36,7 +36,7 @@ function changePadding(delta) {
 
 async function renderFile(filePath, preloadedContent) {
   try {
-    const markdown = preloadedContent || await invoke("read_file", { path: filePath });
+    const markdown = preloadedContent ?? await invoke("read_file", { path: filePath });
     contentEl.innerHTML = marked.parse(markdown);
 
     // Make code blocks accessible for NVDA
@@ -65,9 +65,13 @@ async function renderFile(filePath, preloadedContent) {
 document.addEventListener("keydown", async (e) => {
   if (e.ctrlKey && e.key === "o") {
     e.preventDefault();
-    const result = await invoke("open_file_dialog");
-    if (result) {
-      renderFile(result.path, result.content);
+    try {
+      const result = await invoke("open_file_dialog");
+      if (result) {
+        renderFile(result.path, result.content);
+      }
+    } catch (err) {
+      console.error("Failed to open file dialog:", err);
     }
   } else if (e.ctrlKey && (e.key === "=" || e.key === "+")) {
     e.preventDefault();
