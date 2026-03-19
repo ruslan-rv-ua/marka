@@ -1,5 +1,4 @@
 import { invoke } from "@tauri-apps/api/core";
-import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { getMatches } from "@tauri-apps/plugin-cli";
 import { Marked } from "marked";
@@ -21,9 +20,23 @@ const marked = new Marked(
 
 const contentEl = document.getElementById("content");
 
-async function renderFile(filePath) {
+const root = document.documentElement;
+
+function changeFontSize(delta) {
+  const current = parseFloat(getComputedStyle(root).getPropertyValue("--font-size"));
+  const next = Math.max(10, current + delta);
+  root.style.setProperty("--font-size", `${next}px`);
+}
+
+function changePadding(delta) {
+  const current = parseFloat(getComputedStyle(root).getPropertyValue("--padding-x"));
+  const next = Math.min(128, Math.max(0, current + delta));
+  root.style.setProperty("--padding-x", `${next}px`);
+}
+
+async function renderFile(filePath, preloadedContent) {
   try {
-    const markdown = await invoke("read_file", { path: filePath });
+    const markdown = preloadedContent || await invoke("read_file", { path: filePath });
     contentEl.innerHTML = marked.parse(markdown);
 
     // Make code blocks accessible for NVDA
@@ -49,14 +62,26 @@ async function renderFile(filePath) {
   }
 }
 
-// Listen for file open events from Rust menu
-listen("open-file", (event) => {
-  renderFile(event.payload);
-});
-
-// Handle Escape key: close app
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
+document.addEventListener("keydown", async (e) => {
+  if (e.ctrlKey && e.key === "o") {
+    e.preventDefault();
+    const result = await invoke("open_file_dialog");
+    if (result) {
+      renderFile(result.path, result.content);
+    }
+  } else if (e.ctrlKey && (e.key === "=" || e.key === "+")) {
+    e.preventDefault();
+    changeFontSize(1);
+  } else if (e.ctrlKey && e.key === "-") {
+    e.preventDefault();
+    changeFontSize(-1);
+  } else if (e.ctrlKey && e.key === "[") {
+    e.preventDefault();
+    changePadding(-8);
+  } else if (e.ctrlKey && e.key === "]") {
+    e.preventDefault();
+    changePadding(8);
+  } else if (e.key === "Escape") {
     getCurrentWindow().close();
   }
 });
