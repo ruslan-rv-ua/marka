@@ -11,6 +11,8 @@
   --table-header-bg: #1a1a1a;
   --blockquote-border: #6cf;
   --blockquote-bg: #111;
+  --font-size: 16px;
+  --padding-x: 32px;
 }
 
 * {
@@ -23,14 +25,14 @@ html, body {
   background: var(--bg);
   color: var(--fg);
   font-family: "Segoe UI", sans-serif;
-  font-size: 16px;
+  font-size: var(--font-size);
   line-height: 1.6;
 }
 
 #content {
   max-width: 800px;
   margin: 0 auto;
-  padding: 24px 32px;
+  padding: 24px var(--padding-x);
   outline: none;
 }
 
