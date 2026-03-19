@@ -63,7 +63,7 @@ async function renderFile(filePath, preloadedContent) {
 }
 
 document.addEventListener("keydown", async (e) => {
-  if (e.ctrlKey && e.key === "o") {
+  if (e.ctrlKey && e.code === "KeyO") {
     e.preventDefault();
     try {
       const result = await invoke("open_file_dialog");
@@ -73,16 +73,16 @@ document.addEventListener("keydown", async (e) => {
     } catch (err) {
       console.error("Failed to open file dialog:", err);
     }
-  } else if (e.ctrlKey && (e.key === "=" || e.key === "+")) {
+  } else if (e.ctrlKey && e.code === "Equal") {
     e.preventDefault();
     changeFontSize(1);
-  } else if (e.ctrlKey && e.key === "-") {
+  } else if (e.ctrlKey && e.code === "Minus") {
     e.preventDefault();
     changeFontSize(-1);
-  } else if (e.ctrlKey && e.key === "[") {
+  } else if (e.ctrlKey && e.code === "BracketLeft") {
     e.preventDefault();
     changePadding(-5);
-  } else if (e.ctrlKey && e.key === "]") {
+  } else if (e.ctrlKey && e.code === "BracketRight") {
     e.preventDefault();
     changePadding(5);
   } else if (e.key === "Escape") {
