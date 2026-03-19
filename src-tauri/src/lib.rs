@@ -1,6 +1,6 @@
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder, SubmenuBuilder},
-    Emitter, Manager,
+    Emitter,
 };
 use tauri_plugin_dialog::DialogExt;
 use std::fs;
