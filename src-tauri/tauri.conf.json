@@ -17,6 +17,19 @@
       "csp": null
     }
   },
+  "plugins": {
+    "cli": {
+      "description": "Marka — швидкий перегляд Markdown файлів",
+      "args": [
+        {
+          "name": "file",
+          "index": 1,
+          "takesValue": true,
+          "description": "Шлях до .md файлу"
+        }
+      ]
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",

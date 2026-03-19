@@ -14,6 +14,7 @@ fn read_file(path: String) -> Result<String, String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_cli::init())
         .invoke_handler(tauri::generate_handler![read_file])
         .setup(|app| {
             let open = MenuItemBuilder::new("Відкрити")
