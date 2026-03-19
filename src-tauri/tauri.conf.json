@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "identifier": "com.marka.app",
   "build": {
-    "frontendDist": "../src"
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist",
+    "beforeDevCommand": "pnpm vite:dev",
+    "beforeBuildCommand": "pnpm vite:build"
   },
   "app": {
     "windows": [

@@ -6,7 +6,9 @@
   "scripts": {
     "tauri": "tauri",
     "dev": "tauri dev",
-    "build": "tauri build"
+    "build": "tauri build",
+    "vite:dev": "vite dev --port 1420",
+    "vite:build": "vite build"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +22,7 @@
     "marked-highlight": "^2.2.3"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.10.1"
+    "@tauri-apps/cli": "^2.10.1",
+    "vite": "^8.0.1"
   }
 }
