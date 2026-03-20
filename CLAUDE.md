@@ -13,6 +13,14 @@ pnpm vite:build   # Frontend-only build to /dist
 
 No test suite is configured.
 
+## Git Workflow
+
+This project uses **git-flow** branching model:
+
+- **`main`** — production releases (stable, deployable)
+- **`develop`** — integration branch for features (next release)
+- **`feature/*`** — feature branches (created from `develop`, merged back with `git flow feature finish`)
+
 ## Architecture
 
 **Marka** is a Tauri v2 desktop app — a minimal Markdown file viewer for Windows with NVDA screen reader accessibility.
