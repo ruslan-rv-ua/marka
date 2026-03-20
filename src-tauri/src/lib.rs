@@ -18,6 +18,7 @@ pub struct Settings {
     pub window_x: Option<f64>,
     pub window_y: Option<f64>,
     pub window_maximized: bool,
+    pub theme: String,
 }
 
 impl Default for Settings {
@@ -30,6 +31,7 @@ impl Default for Settings {
             window_x: None,
             window_y: None,
             window_maximized: false,
+            theme: "dark".to_string(),
         }
     }
 }
