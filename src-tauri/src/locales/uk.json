@@ -1,0 +1,11 @@
+{
+  "theme.light": "Світла тема",
+  "theme.dark": "Темна тема",
+  "copy.button": "Копіювати код {index}",
+  "copy.success": "Код скопійовано",
+  "copy.error": "Помилка копіювання",
+  "code.label": "Блок коду",
+  "initial.message": "Натисніть Ctrl+O щоб відкрити файл.",
+  "document.label": "Вміст документа",
+  "error.prefix": "Помилка: "
+}
