@@ -4,6 +4,7 @@ import { getMatches } from "@tauri-apps/plugin-cli";
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
+import { initI18n, t, getLocale } from "./i18n.js";
 
 // Configure marked with highlight.js via marked-highlight extension
 const marked = new Marked(
@@ -21,6 +22,24 @@ const marked = new Marked(
 const contentEl = document.getElementById("content");
 
 const root = document.documentElement;
+
+async function initializeLocale() {
+  const settings = await invoke("load_settings");
+
+  // Якщо локаль не встановлена — перший запуск
+  if (!settings.locale || settings.locale === "") {
+    const detectedLocale = await invoke("detect_system_locale");
+    settings.locale = detectedLocale;
+    // Зберегти налаштування з новою локаллю
+    await invoke("save_settings", { settings });
+  }
+
+  // Ініціалізувати i18n
+  await initI18n(settings.locale);
+
+  // Встановити lang атрибут на документі
+  document.documentElement.lang = getLocale();
+}
 
 async function applySettings() {
   const s = await invoke("load_settings");
@@ -110,7 +129,7 @@ function announceCopy(text) {
 
 function announceTheme(theme) {
   const el = getLiveRegion();
-  el.textContent = theme === "light" ? "Світла тема" : "Темна тема";
+  el.textContent = t(theme === "light" ? "theme.light" : "theme.dark");
   clearTimeout(pendingClearTimeout);
   pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
 }
@@ -143,15 +162,15 @@ async function renderFile(filePath, preloadedContent) {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "copy-btn";
-      btn.setAttribute("aria-label", `Копіювати код ${codeBlockIndex}`);
+      btn.setAttribute("aria-label", t("copy.button", { index: codeBlockIndex }));
       btn.innerHTML = COPY_ICON;
       btn.addEventListener("click", async () => {
         const codeEl = pre.querySelector("code") ?? pre;
         try {
           await navigator.clipboard.writeText(codeEl.textContent);
-          if (renderGeneration === myGeneration) announceCopy("Код скопійовано");
+          if (renderGeneration === myGeneration) announceCopy(t("copy.success"));
         } catch {
-          if (renderGeneration === myGeneration) announceCopy("Помилка копіювання");
+          if (renderGeneration === myGeneration) announceCopy(t("copy.error"));
         }
       });
       const wrapper = document.createElement("div");
@@ -164,7 +183,7 @@ async function renderFile(filePath, preloadedContent) {
     // Make code blocks accessible for NVDA
     contentEl.querySelectorAll("pre").forEach((pre) => {
       pre.setAttribute("role", "region");
-      pre.setAttribute("aria-label", "Блок коду");
+      pre.setAttribute("aria-label", t("code.label"));
       pre.setAttribute("tabindex", "0");
     });
 
@@ -178,7 +197,7 @@ async function renderFile(filePath, preloadedContent) {
   } catch (err) {
     const errorEl = document.createElement("p");
     errorEl.setAttribute("role", "alert");
-    errorEl.textContent = `Помилка: ${err}`;
+    errorEl.textContent = `${t("error.prefix")}${err}`;
     contentEl.replaceChildren(errorEl);
     contentEl.focus();
   }
@@ -234,8 +253,9 @@ async function checkCliArgs() {
 }
 
 try {
+  await initializeLocale();
   await applySettings();
 } catch (err) {
-  console.error("applySettings failed:", err);
+  console.error("Initialization failed:", err);
 }
 checkCliArgs();  // intentionally not awaited — CLI open is independent of settings
