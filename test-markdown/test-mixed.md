@@ -1,20 +1,20 @@
-# Змішаний тест
+# Mixed Test
 
-Цей файл містить комбінацію перехресних посилань, зовнішніх посилань, зовнішніх та внутрішніх зображень.
+This file contains a combination of cross-links, external links, external and internal images.
 
-## Перехресні посилання
+## Cross-links
 
-- [Дивись test-complete.md](test-complete.md) - посилання на головний файл
-- [Дивись test-links.md](test-links.md) - посилання на файл з посиланнями
-- [Дивись test-images.md](test-images.md) - посилання на файл з зображеннями
+- [See test-complete.md](test-complete.md) - link to the main file
+- [See test-links.md](test-links.md) - link to the links file
+- [See test-images.md](test-images.md) - link to the images file
 
-## Зовнішні посилання
+## External Links
 
-- [GitHub](https://github.com) - платформа для розробників
-- [Google](https://google.com) - пошукова система
-- [Tauri](https://tauri.app/) - фреймворк для створення додатків
+- [GitHub](https://github.com) - platform for developers
+- [Google](https://google.com) - search engine
+- [Tauri](https://tauri.app/) - framework for creating applications
 
-## Зовнішні зображення
+## External Images
 
 ### GitHub Logo
 ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
@@ -22,51 +22,51 @@
 ### Rust Logo
 ![Rust Logo](https://www.rust-lang.org/static/images/rust-logo-blk.svg)
 
-## Внутрішні зображення
+## Internal Images
 
-### Тестове зображення 1
-![Тестове зображення 1](test-image1.png)
+### Test Image 1
+![Test Image 1](test-image1.png)
 
-### Тестове зображення 2
-![Тестове зображення 2](test-image2.png)
+### Test Image 2
+![Test Image 2](test-image2.png)
 
-### Тестове зображення 3
-![Тестове зображення 3](test-image3.png)
+### Test Image 3
+![Test Image 3](test-image3.png)
 
-## Змішаний контент
+## Mixed Content
 
-Тут ви можете побачити комбінацію різних елементів:
+Here you can see a combination of different elements:
 
-1. Посилання на інші файли:
-   - [Перейти до test-complete.md](test-complete.md)
-   - [Переглянути посилання](test-links.md)
-   - [Переглянути зображення](test-images.md)
+1. Links to other files:
+   - [Go to test-complete.md](test-complete.md)
+   - [View links](test-links.md)
+   - [View images](test-images.md)
 
-2. Зовнішні посилання:
-   - [Відвідати GitHub](https://github.com)
-   - [Пошукати в Google](https://google.com)
+2. External links:
+   - [Visit GitHub](https://github.com)
+   - [Search on Google](https://google.com)
 
-3. Зовнішні зображення:
+3. External images:
 ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
 
-4. Внутрішні зображення:
-![Тестове зображення 1](test-image1.png)
-![Тестове зображення 2](test-image2.png)
+4. Internal images:
+![Test Image 1](test-image1.png)
+![Test Image 2](test-image2.png)
 
-## Таблиця з посиланнями та зображеннями
+## Table with links and images
 
-| Тип | Елемент |
-|-----|---------|
-| Перехресне посилання | [Дивись test-complete.md](test-complete.md) |
-| Зовнішнє посилання | [GitHub](https://github.com) |
-| Зовнішнє зображення | ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png) |
-| Внутрішнє зображення | ![Тестове зображення 1](test-image1.png) |
+| Type | Element |
+|------|---------|
+| Cross-link | [See test-complete.md](test-complete.md) |
+| External link | [GitHub](https://github.com) |
+| External image | ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png) |
+| Internal image | ![Test Image 1](test-image1.png) |
 
-## Галерея
+## Gallery
 
-| Зображення 1 | Зображення 2 | Зображення 3 |
-|-------------|-------------|-------------|
-| ![Тестове зображення 1](test-image1.png) | ![Тестове зображення 2](test-image2.png) | ![Тестове зображення 3](test-image3.png) |
+| Image 1 | Image 2 | Image 3 |
+|---------|---------|---------|
+| ![Test Image 1](test-image1.png) | ![Test Image 2](test-image2.png) | ![Test Image 3](test-image3.png) |
 
-## Кінець тесту
-Це кінець змішаного файлу з тестами.
+## End of Test
+This is the end of the mixed test file.

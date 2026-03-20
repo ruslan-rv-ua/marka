@@ -1,32 +1,32 @@
-# Тест посилань
+# Link Test
 
-Цей файл містить різні типи посилань для тестування markdown переглядача.
+This file contains various types of links for testing the markdown viewer.
 
-## Перехресні посилання на інші файли
+## Cross-links to other files
 
-- [Дивись test-complete.md](test-complete.md) - посилання на головний файл
-- [Дивись test-images.md](test-images.md) - посилання на файл з зображеннями
-- [Дивись test-mixed.md](test-mixed.md) - посилання на змішаний файл
+- [See test-complete.md](test-complete.md) - link to the main file
+- [See test-images.md](test-images.md) - link to the image file
+- [See test-mixed.md](test-mixed.md) - link to the mixed file
 
-## Зовнішні посилання
+## External Links
 
-- [GitHub](https://github.com) - популярна платформа для розробників
-- [Google](https://google.com) - пошукова система
-- [Stack Overflow](https://stackoverflow.com) - форум для розробників
+- [GitHub](https://github.com) - popular platform for developers
+- [Google](https://google.com) - search engine
+- [Stack Overflow](https://stackoverflow.com) - forum for developers
 
-## Змішані посилання
+## Mixed Links
 
-Тут ви можете побачити комбінацію різних типів посилань:
+Here you can see a combination of different types of links:
 
-1. Перехресне посилання: [Перейти до test-complete.md](test-complete.md)
-2. Зовнішнє посилання: [Відвідати GitHub](https://github.com)
-3. Ще одне перехресне посилання: [Переглянути зображення](test-images.md)
+1. Cross-link: [Go to test-complete.md](test-complete.md)
+2. External link: [Visit GitHub](https://github.com)
+3. Another cross-link: [View images](test-images.md)
 
-## Додаткові посилання
+## Additional Links
 
-- [Документація Markdown](https://www.markdownguide.org/)
+- [Markdown Documentation](https://www.markdownguide.org/)
 - [Tauri Framework](https://tauri.app/)
 - [Rust Programming Language](https://www.rust-lang.org/)
 
-## Кінець тесту
-Це кінець файлу з тестами посилань.
+## End of Test
+This is the end of the link test file.

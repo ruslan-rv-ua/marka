@@ -1,8 +1,8 @@
-# Тест зображень
+# Image Test
 
-Цей файл містить різні типи зображень для тестування markdown переглядача.
+This file contains various types of images for testing the markdown viewer.
 
-## Зовнішні зображення
+## External Images
 
 ### GitHub Logo
 ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
@@ -10,37 +10,37 @@
 ### Rust Logo
 ![Rust Logo](https://www.rust-lang.org/static/images/rust-logo-blk.svg)
 
-## Внутрішні зображення
+## Internal Images
 
-### Тестове зображення 1 (червоний прямокутник)
-![Тестове зображення 1](test-image1.png)
+### Test Image 1 (red rectangle)
+![Test Image 1](test-image1.png)
 
-### Тестове зображення 2 (синій прямокутник)
-![Тестове зображення 2](test-image2.png)
+### Test Image 2 (blue rectangle)
+![Test Image 2](test-image2.png)
 
-### Тестове зображення 3 (зелений прямокутник)
-![Тестове зображення 3](test-image3.png)
+### Test Image 3 (green rectangle)
+![Test Image 3](test-image3.png)
 
-## Змішані посилання та зображення
+## Mixed Links and Images
 
-Тут ви можете побачити комбінацію зображень та посилань:
+Here you can see a combination of images and links:
 
-1. Зовнішнє зображення:
+1. External image:
 ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
 
-2. Внутрішнє зображення:
-![Тестове зображення 1](test-image1.png)
+2. Internal image:
+![Test Image 1](test-image1.png)
 
-3. Посилання на інші файли:
-- [Дивись test-links.md](test-links.md)
-- [Дивись test-mixed.md](test-mixed.md)
+3. Links to other files:
+- [See test-links.md](test-links.md)
+- [See test-mixed.md](test-mixed.md)
 
-## Галерея зображень
+## Image Gallery
 
-### Внутрішні зображення
-| Зображення 1 | Зображення 2 | Зображення 3 |
-|-------------|-------------|-------------|
-| ![Тестове зображення 1](test-image1.png) | ![Тестове зображення 2](test-image2.png) | ![Тестове зображення 3](test-image3.png) |
+### Internal Images
+| Image 1 | Image 2 | Image 3 |
+|---------|---------|---------|
+| ![Test Image 1](test-image1.png) | ![Test Image 2](test-image2.png) | ![Test Image 3](test-image3.png) |
 
-## Кінець тесту
-Це кінець файлу з тестами зображень.
+## End of Test
+This is the end of the image test file.
