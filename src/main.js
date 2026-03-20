@@ -22,6 +22,9 @@ const contentEl = document.getElementById("content");
 
 const root = document.documentElement;
 
+let pendingClearTimeout = null;
+let renderGeneration = 0;
+
 function changeFontSize(delta) {
   const current = parseFloat(getComputedStyle(root).getPropertyValue("--font-size"));
   const next = Math.min(72, Math.max(10, current + delta));
@@ -34,10 +37,52 @@ function changePadding(delta) {
   root.style.setProperty("--padding-x", `${next}%`);
 }
 
+function announceCopy(text) {
+  const el = document.getElementById("copy-announcement");
+  if (!el) return;
+  el.textContent = text;
+  clearTimeout(pendingClearTimeout);
+  pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
+}
+
 async function renderFile(filePath, preloadedContent) {
   try {
     const markdown = preloadedContent ?? await invoke("read_file", { path: filePath });
     contentEl.innerHTML = marked.parse(markdown);
+
+    // Insert aria-live announcement region once
+    if (!document.getElementById("copy-announcement")) {
+      const liveEl = document.createElement("div");
+      liveEl.id = "copy-announcement";
+      liveEl.setAttribute("aria-live", "polite");
+      liveEl.setAttribute("aria-atomic", "true");
+      liveEl.className = "visually-hidden";
+      document.body.appendChild(liveEl);
+    }
+
+    // Add copy buttons after each non-empty code block
+    const myGeneration = ++renderGeneration;
+    let codeBlockIndex = 0;
+    contentEl.querySelectorAll("pre").forEach((pre) => {
+      if (pre.textContent.trim() === "") return;
+      codeBlockIndex++;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "copy-btn";
+      btn.setAttribute("aria-label", `Копіювати код ${codeBlockIndex}`);
+      btn.textContent = "Копіювати";
+      btn.addEventListener("click", async () => {
+        const codeEl = pre.querySelector("code") ?? pre;
+        clearTimeout(pendingClearTimeout);
+        try {
+          await navigator.clipboard.writeText(codeEl.textContent);
+          if (renderGeneration === myGeneration) announceCopy("Код скопійовано");
+        } catch {
+          if (renderGeneration === myGeneration) announceCopy("Помилка копіювання");
+        }
+      });
+      pre.insertAdjacentElement("afterend", btn);
+    });
 
     // Make code blocks accessible for NVDA
     contentEl.querySelectorAll("pre").forEach((pre) => {
