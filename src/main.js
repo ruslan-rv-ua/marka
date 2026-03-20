@@ -30,7 +30,7 @@ async function applySettings() {
   const win = getCurrentWindow();
   if (s.windowMaximized) {
     await win.maximize();
-  } else if (s.windowX !== null && s.windowY !== null) {
+  } else if (s.windowX != null && s.windowY != null) {
     await win.setPosition(new PhysicalPosition(s.windowX, s.windowY));
     await win.setSize(new PhysicalSize(s.windowWidth, s.windowHeight));
   }
@@ -116,5 +116,9 @@ async function checkCliArgs() {
   }
 }
 
-await applySettings();
+try {
+  await applySettings();
+} catch (err) {
+  console.error("applySettings failed:", err);
+}
 checkCliArgs();  // intentionally not awaited — CLI open is independent of settings
