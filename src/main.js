@@ -22,16 +22,59 @@ const contentEl = document.getElementById("content");
 
 const root = document.documentElement;
 
+async function applySettings() {
+  const s = await invoke("load_settings");
+  root.style.setProperty("--font-size", `${s.fontSize}px`);
+  root.style.setProperty("--padding-x", `${s.paddingX}%`);
+
+  // Window geometry is restored in the Rust setup hook (before window is shown).
+  // Here we only register listeners to save future changes.
+  const win = getCurrentWindow();
+  // UnlistenFn return values intentionally discarded — single-window app, no teardown needed
+  await win.onResized(() => scheduleSave());
+  await win.onMoved(() => scheduleSave());
+}
+
+let saveTimer = null;
+async function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    (async () => {
+      try {
+        const win = getCurrentWindow();
+        const maximized = await win.isMaximized();
+        const size = await win.outerSize();
+        const pos = await win.outerPosition();
+        await invoke("save_settings", {
+          settings: {
+            fontSize: parseFloat(getComputedStyle(root).getPropertyValue("--font-size")),
+            paddingX: parseFloat(getComputedStyle(root).getPropertyValue("--padding-x")),
+            windowWidth: size.width,
+            windowHeight: size.height,
+            windowX: pos.x,
+            windowY: pos.y,
+            windowMaximized: maximized,
+          }
+        });
+      } catch (err) {
+        console.error("scheduleSave failed:", err);
+      }
+    })();
+  }, 1000);
+}
+
 function changeFontSize(delta) {
   const current = parseFloat(getComputedStyle(root).getPropertyValue("--font-size"));
   const next = Math.min(72, Math.max(10, current + delta));
   root.style.setProperty("--font-size", `${next}px`);
+  scheduleSave();
 }
 
 function changePadding(delta) {
   const current = parseFloat(getComputedStyle(root).getPropertyValue("--padding-x"));
   const next = Math.min(25, Math.max(0, current + delta));
   root.style.setProperty("--padding-x", `${next}%`);
+  scheduleSave();
 }
 
 async function renderFile(filePath, preloadedContent) {
@@ -102,4 +145,9 @@ async function checkCliArgs() {
   }
 }
 
-checkCliArgs();
+try {
+  await applySettings();
+} catch (err) {
+  console.error("applySettings failed:", err);
+}
+checkCliArgs();  // intentionally not awaited — CLI open is independent of settings
