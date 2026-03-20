@@ -26,6 +26,11 @@ async function applySettings() {
   const s = await invoke("load_settings");
   root.style.setProperty("--font-size", `${s.fontSize}px`);
   root.style.setProperty("--padding-x", `${s.paddingX}%`);
+  if (s.theme === "light") {
+    root.setAttribute("data-theme", "light");
+  } else {
+    root.removeAttribute("data-theme");
+  }
 
   // Window geometry is restored in the Rust setup hook (before window is shown).
   // Here we only register listeners to save future changes.
@@ -54,6 +59,7 @@ async function scheduleSave() {
             windowX: pos.x,
             windowY: pos.y,
             windowMaximized: maximized,
+            theme: root.getAttribute("data-theme") ?? "dark",
           }
         });
       } catch (err) {
