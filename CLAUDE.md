@@ -13,6 +13,15 @@ pnpm vite:build   # Frontend-only build to /dist
 
 No test suite is configured.
 
+## Version Sync
+
+When bumping version, update all three files to the same version:
+- `package.json` → `"version"`
+- `src-tauri/tauri.conf.json` → `"version"`
+- `src-tauri/Cargo.toml` → `version =`
+
+Current version: `0.1.0`
+
 ## Git Workflow
 
 This project uses **git-flow** branching model:
