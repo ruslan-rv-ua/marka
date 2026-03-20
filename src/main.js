@@ -52,7 +52,7 @@ async function renderFile(filePath, preloadedContent) {
 
     // Update window title
     const fileName = filePath.split(/[\\/]/).pop();
-    document.title = `${fileName} — Marka`;
+    await getCurrentWindow().setTitle(`${fileName} — Marka`);
   } catch (err) {
     const errorEl = document.createElement("p");
     errorEl.setAttribute("role", "alert");
