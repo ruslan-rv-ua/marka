@@ -30,7 +30,7 @@ impl Default for Settings {
         Self {
             font_size: 16.0,
             padding_x: 10.0,
-            locale: "en".to_string(),
+            locale: String::new(),  // Empty on first run, will be detected and set by initializeLocale()
             window_width: 800.0,
             window_height: 600.0,
             window_x: None,
