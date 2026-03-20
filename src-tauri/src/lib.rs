@@ -43,7 +43,7 @@ fn load_settings() -> Settings {
         return Settings::default();
     };
 
-    let Ok(contents) = std::fs::read_to_string(&path) else {
+    let Ok(contents) = fs::read_to_string(&path) else {
         return Settings::default();
     };
 
