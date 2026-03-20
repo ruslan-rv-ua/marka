@@ -96,6 +96,33 @@ function announceCopy(text) {
   pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
 }
 
+function announceTheme(theme) {
+  let el = document.getElementById("copy-announcement");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "copy-announcement";
+    el.setAttribute("aria-live", "polite");
+    el.setAttribute("aria-atomic", "true");
+    el.className = "visually-hidden";
+    document.body.appendChild(el);
+  }
+  el.textContent = theme === "light" ? "Світла тема" : "Темна тема";
+  clearTimeout(pendingClearTimeout);
+  pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
+}
+
+function toggleTheme() {
+  const current = root.getAttribute("data-theme");
+  const next = current === "light" ? "dark" : "light";
+  if (next === "light") {
+    root.setAttribute("data-theme", "light");
+  } else {
+    root.removeAttribute("data-theme");
+  }
+  announceTheme(next);
+  scheduleSave();
+}
+
 async function renderFile(filePath, preloadedContent) {
   try {
     const markdown = preloadedContent ?? await invoke("read_file", { path: filePath });
@@ -190,6 +217,9 @@ document.addEventListener("keydown", async (e) => {
   } else if (e.ctrlKey && e.code === "BracketRight") {
     e.preventDefault();
     changePadding(5);
+  } else if (e.ctrlKey && e.code === "KeyT") {
+    e.preventDefault();
+    toggleTheme();
   } else if (e.key === "Escape") {
     getCurrentWindow().close();
   }
