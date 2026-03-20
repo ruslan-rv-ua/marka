@@ -192,33 +192,47 @@ img {
   border: 0;
 }
 
-/* When a pre is followed by a copy button, the button owns the bottom spacing */
-pre:has(+ .copy-btn) {
+/* Code block wrapper — provides positioning context for the copy button */
+.code-block {
+  position: relative;
+  margin-bottom: 1em;
+}
+
+.code-block pre {
   margin-bottom: 0;
 }
 
 .copy-btn {
-  display: block;
-  margin-top: 4px;
-  margin-bottom: 1em;
-  padding: 4px 10px;
-  font-family: inherit;
-  font-size: 0.85em;
-  color: var(--accent);
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--fg);
   background: transparent;
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.15s, color 0.15s, border-color 0.15s, background 0.15s;
 }
 
 .copy-btn:hover {
-  border-color: var(--accent);
+  color: var(--accent);
+  border-color: var(--border);
   background: rgba(102, 204, 255, 0.08);
+  opacity: 1;
 }
 
 .copy-btn:focus-visible {
+  color: var(--accent);
   border-color: var(--accent);
   background: rgba(102, 204, 255, 0.08);
+  opacity: 1;
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
