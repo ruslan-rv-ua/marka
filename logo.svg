@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="white"/>
+  <rect x="0" y="0" width="512" height="512" fill="black"/>
+  <circle cx="0.0" cy="0" r="12" fill="white"/>
+  <circle cx="0.0" cy="512" r="12" fill="white"/>
+  <circle cx="34.13" cy="0" r="12" fill="white"/>
+  <circle cx="34.13" cy="512" r="12" fill="white"/>
+  <circle cx="68.27" cy="0" r="12" fill="white"/>
+  <circle cx="68.27" cy="512" r="12" fill="white"/>
+  <circle cx="102.4" cy="0" r="12" fill="white"/>
+  <circle cx="102.4" cy="512" r="12" fill="white"/>
+  <circle cx="136.53" cy="0" r="12" fill="white"/>
+  <circle cx="136.53" cy="512" r="12" fill="white"/>
+  <circle cx="170.67" cy="0" r="12" fill="white"/>
+  <circle cx="170.67" cy="512" r="12" fill="white"/>
+  <circle cx="204.8" cy="0" r="12" fill="white"/>
+  <circle cx="204.8" cy="512" r="12" fill="white"/>
+  <circle cx="238.93" cy="0" r="12" fill="white"/>
+  <circle cx="238.93" cy="512" r="12" fill="white"/>
+  <circle cx="273.07" cy="0" r="12" fill="white"/>
+  <circle cx="273.07" cy="512" r="12" fill="white"/>
+  <circle cx="307.2" cy="0" r="12" fill="white"/>
+  <circle cx="307.2" cy="512" r="12" fill="white"/>
+  <circle cx="341.33" cy="0" r="12" fill="white"/>
+  <circle cx="341.33" cy="512" r="12" fill="white"/>
+  <circle cx="375.47" cy="0" r="12" fill="white"/>
+  <circle cx="375.47" cy="512" r="12" fill="white"/>
+  <circle cx="409.6" cy="0" r="12" fill="white"/>
+  <circle cx="409.6" cy="512" r="12" fill="white"/>
+  <circle cx="443.73" cy="0" r="12" fill="white"/>
+  <circle cx="443.73" cy="512" r="12" fill="white"/>
+  <circle cx="477.87" cy="0" r="12" fill="white"/>
+  <circle cx="477.87" cy="512" r="12" fill="white"/>
+  <circle cx="512.0" cy="0" r="12" fill="white"/>
+  <circle cx="512.0" cy="512" r="12" fill="white"/>
+  <circle cx="0" cy="34.13" r="12" fill="white"/>
+  <circle cx="512" cy="34.13" r="12" fill="white"/>
+  <circle cx="0" cy="68.27" r="12" fill="white"/>
+  <circle cx="512" cy="68.27" r="12" fill="white"/>
+  <circle cx="0" cy="102.4" r="12" fill="white"/>
+  <circle cx="512" cy="102.4" r="12" fill="white"/>
+  <circle cx="0" cy="136.53" r="12" fill="white"/>
+  <circle cx="512" cy="136.53" r="12" fill="white"/>
+  <circle cx="0" cy="170.67" r="12" fill="white"/>
+  <circle cx="512" cy="170.67" r="12" fill="white"/>
+  <circle cx="0" cy="204.8" r="12" fill="white"/>
+  <circle cx="512" cy="204.8" r="12" fill="white"/>
+  <circle cx="0" cy="238.93" r="12" fill="white"/>
+  <circle cx="512" cy="238.93" r="12" fill="white"/>
+  <circle cx="0" cy="273.07" r="12" fill="white"/>
+  <circle cx="512" cy="273.07" r="12" fill="white"/>
+  <circle cx="0" cy="307.2" r="12" fill="white"/>
+  <circle cx="512" cy="307.2" r="12" fill="white"/>
+  <circle cx="0" cy="341.33" r="12" fill="white"/>
+  <circle cx="512" cy="341.33" r="12" fill="white"/>
+  <circle cx="0" cy="375.47" r="12" fill="white"/>
+  <circle cx="512" cy="375.47" r="12" fill="white"/>
+  <circle cx="0" cy="409.6" r="12" fill="white"/>
+  <circle cx="512" cy="409.6" r="12" fill="white"/>
+  <circle cx="0" cy="443.73" r="12" fill="white"/>
+  <circle cx="512" cy="443.73" r="12" fill="white"/>
+  <circle cx="0" cy="477.87" r="12" fill="white"/>
+  <circle cx="512" cy="477.87" r="12" fill="white"/>
+  <rect x="40" y="40" width="432" height="432" fill="white"/>
+  <g transform="translate(1.329,104.382) scale(2.36903)">
+    <path d="M30 98V30h20l20 25 20-25h20v68H90V59L70 84 50 59v39zm125 0l-30-33h20V30h20v35h20z" fill="black"/>
+  </g>
+</svg>

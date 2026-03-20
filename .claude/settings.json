@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(pnpm vite:build)",
-      "Read(//c/Users/Руслан/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.5/skills/subagent-driven-development/**)"
+      "Read(//c/Users/Руслан/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.5/skills/subagent-driven-development/**)",
+      "Read(//c/dev/marka-tauri/src-tauri/src/**)",
+      "Read(//c/Users/Руслан/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.5/skills/writing-plans/**)"
     ]
   }
 }
