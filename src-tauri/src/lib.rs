@@ -51,6 +51,20 @@ fn load_settings() -> Settings {
 }
 
 #[tauri::command]
+fn save_settings(settings: Settings) -> Result<(), String> {
+    let exe = std::env::current_exe().map_err(|e| e.to_string())?;
+    let path = exe
+        .parent()
+        .ok_or("Не вдалося визначити папку exe")?
+        .join("settings.json");
+
+    let json = serde_json::to_string_pretty(&settings)
+        .map_err(|e| e.to_string())?;
+
+    fs::write(&path, json).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 fn read_file(path: String) -> Result<String, String> {
     fs::read_to_string(&path).map_err(|e| format!("Не вдалося прочитати файл: {}", e))
 }
@@ -79,7 +93,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_cli::init())
-        .invoke_handler(tauri::generate_handler![read_file, open_file_dialog, load_settings])
+        .invoke_handler(tauri::generate_handler![read_file, open_file_dialog, load_settings, save_settings])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
