@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { getCurrentWindow } from "@tauri-apps/api/window";
+import { getCurrentWindow, PhysicalPosition, PhysicalSize } from "@tauri-apps/api/window";
 import { getMatches } from "@tauri-apps/plugin-cli";
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
@@ -21,6 +21,20 @@ const marked = new Marked(
 const contentEl = document.getElementById("content");
 
 const root = document.documentElement;
+
+async function applySettings() {
+  const s = await invoke("load_settings");
+  root.style.setProperty("--font-size", `${s.fontSize}px`);
+  root.style.setProperty("--padding-x", `${s.paddingX}%`);
+
+  const win = getCurrentWindow();
+  if (s.windowMaximized) {
+    await win.maximize();
+  } else if (s.windowX !== null && s.windowY !== null) {
+    await win.setPosition(new PhysicalPosition(s.windowX, s.windowY));
+    await win.setSize(new PhysicalSize(s.windowWidth, s.windowHeight));
+  }
+}
 
 function changeFontSize(delta) {
   const current = parseFloat(getComputedStyle(root).getPropertyValue("--font-size"));
@@ -102,4 +116,5 @@ async function checkCliArgs() {
   }
 }
 
-checkCliArgs();
+await applySettings();
+checkCliArgs();  // intentionally not awaited — CLI open is independent of settings
