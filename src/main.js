@@ -26,6 +26,11 @@ async function applySettings() {
   const s = await invoke("load_settings");
   root.style.setProperty("--font-size", `${s.fontSize}px`);
   root.style.setProperty("--padding-x", `${s.paddingX}%`);
+  if (s.theme === "light") {
+    root.setAttribute("data-theme", "light");
+  } else {
+    root.removeAttribute("data-theme");
+  }
 
   // Window geometry is restored in the Rust setup hook (before window is shown).
   // Here we only register listeners to save future changes.
@@ -54,6 +59,7 @@ async function scheduleSave() {
             windowX: pos.x,
             windowY: pos.y,
             windowMaximized: maximized,
+            theme: root.getAttribute("data-theme") ?? "dark",
           }
         });
       } catch (err) {
@@ -82,12 +88,42 @@ function changePadding(delta) {
   scheduleSave();
 }
 
+function getLiveRegion() {
+  let el = document.getElementById("copy-announcement");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "copy-announcement";
+    el.setAttribute("aria-live", "polite");
+    el.setAttribute("aria-atomic", "true");
+    el.className = "visually-hidden";
+    document.body.appendChild(el);
+  }
+  return el;
+}
+
 function announceCopy(text) {
-  const el = document.getElementById("copy-announcement");
-  if (!el) return;
+  const el = getLiveRegion();
   el.textContent = text;
   clearTimeout(pendingClearTimeout);
   pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
+}
+
+function announceTheme(theme) {
+  const el = getLiveRegion();
+  el.textContent = theme === "light" ? "Світла тема" : "Темна тема";
+  clearTimeout(pendingClearTimeout);
+  pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
+}
+
+function toggleTheme() {
+  const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+  if (next === "light") {
+    root.setAttribute("data-theme", "light");
+  } else {
+    root.removeAttribute("data-theme");
+  }
+  announceTheme(next);
+  scheduleSave();
 }
 
 async function renderFile(filePath, preloadedContent) {
@@ -95,15 +131,8 @@ async function renderFile(filePath, preloadedContent) {
     const markdown = preloadedContent ?? await invoke("read_file", { path: filePath });
     contentEl.innerHTML = marked.parse(markdown);
 
-    // Insert aria-live announcement region once
-    if (!document.getElementById("copy-announcement")) {
-      const liveEl = document.createElement("div");
-      liveEl.id = "copy-announcement";
-      liveEl.setAttribute("aria-live", "polite");
-      liveEl.setAttribute("aria-atomic", "true");
-      liveEl.className = "visually-hidden";
-      document.body.appendChild(liveEl);
-    }
+    // Ensure aria-live announcement region exists
+    getLiveRegion();
 
     // Add copy buttons after each non-empty code block
     const myGeneration = ++renderGeneration;
@@ -184,6 +213,9 @@ document.addEventListener("keydown", async (e) => {
   } else if (e.ctrlKey && e.code === "BracketRight") {
     e.preventDefault();
     changePadding(5);
+  } else if (e.ctrlKey && e.code === "KeyT") {
+    e.preventDefault();
+    toggleTheme();
   } else if (e.key === "Escape") {
     getCurrentWindow().close();
   }
