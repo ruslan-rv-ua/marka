@@ -98,7 +98,9 @@ fn detect_system_locale() -> String {
     use sys_locale::get_locale;
     match get_locale() {
         Some(locale) => {
-            if locale.starts_with("uk") {
+            // Windows returns "uk-UA", "uk_UA", or "uk" for Ukrainian
+            let lower_locale = locale.to_lowercase();
+            if lower_locale.starts_with("uk") {
                 "uk".to_string()
             } else {
                 "en".to_string()
