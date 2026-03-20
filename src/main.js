@@ -39,22 +39,28 @@ async function applySettings() {
 let saveTimer = null;
 async function scheduleSave() {
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(async () => {
-    const win = getCurrentWindow();
-    const maximized = await win.isMaximized();
-    const size = await win.outerSize();
-    const pos = await win.outerPosition();
-    await invoke("save_settings", {
-      settings: {
-        fontSize: parseFloat(getComputedStyle(root).getPropertyValue("--font-size")),
-        paddingX: parseFloat(getComputedStyle(root).getPropertyValue("--padding-x")),
-        windowWidth: size.width,
-        windowHeight: size.height,
-        windowX: pos.x,
-        windowY: pos.y,
-        windowMaximized: maximized,
+  saveTimer = setTimeout(() => {
+    (async () => {
+      try {
+        const win = getCurrentWindow();
+        const maximized = await win.isMaximized();
+        const size = await win.outerSize();
+        const pos = await win.outerPosition();
+        await invoke("save_settings", {
+          settings: {
+            fontSize: parseFloat(getComputedStyle(root).getPropertyValue("--font-size")),
+            paddingX: parseFloat(getComputedStyle(root).getPropertyValue("--padding-x")),
+            windowWidth: size.width,
+            windowHeight: size.height,
+            windowX: pos.x,
+            windowY: pos.y,
+            windowMaximized: maximized,
+          }
+        });
+      } catch (err) {
+        console.error("scheduleSave failed:", err);
       }
-    }).catch(err => console.error("save_settings failed:", err));
+    })();
   }, 1000);
 }
 
