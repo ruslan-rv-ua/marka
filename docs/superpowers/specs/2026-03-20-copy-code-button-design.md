@@ -23,14 +23,12 @@ Add a "Copy" button after each code block in the rendered Markdown. The button a
 Each rendered `<pre>` with non-empty content is followed by:
 
 ```html
-<button type="button" class="copy-btn" aria-label="Копіювати код 1">📋 Копіювати</button>
+<button type="button" class="copy-btn" aria-label="Копіювати код 1">Копіювати</button>
 ```
 
 `type="button"` is explicit to prevent accidental form submission.
 
 When a document has multiple code blocks, each button gets a numbered `aria-label`: "Копіювати код 1", "Копіювати код 2", etc. The counter increments only for non-empty `<pre>` elements that actually receive a button. It resets to 1 on every `renderFile()` call.
-
-**Emoji and NVDA:** `aria-label` on a `<button>` is the authoritative accessible name in all NVDA modes. NVDA announces "Копіювати код N кнопка" — the emoji inside is not read separately.
 
 A single `aria-live` region is inserted into `<body>` once, guarded by `document.getElementById("copy-announcement")`. Never destroyed or recreated:
 
