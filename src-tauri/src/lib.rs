@@ -13,6 +13,7 @@ pub struct OpenedFile {
 pub struct Settings {
     pub font_size: f64,
     pub padding_x: f64,
+    pub locale: String,
     pub window_width: f64,
     pub window_height: f64,
     pub window_x: Option<f64>,
@@ -26,6 +27,7 @@ impl Default for Settings {
         Self {
             font_size: 16.0,
             padding_x: 10.0,
+            locale: "en".to_string(),
             window_width: 800.0,
             window_height: 600.0,
             window_x: None,
