@@ -1,3 +1,4 @@
+use tauri::Manager;
 use tauri_plugin_dialog::DialogExt;
 use std::fs;
 
@@ -33,34 +34,31 @@ impl Default for Settings {
     }
 }
 
-#[tauri::command]
-fn load_settings() -> Settings {
-    let path = std::env::current_exe()
+fn settings_path() -> Option<std::path::PathBuf> {
+    std::env::current_exe()
         .ok()
-        .and_then(|p| p.parent().map(|d| d.join("settings.json")));
+        .and_then(|p| p.parent().map(|d| d.join("settings.json")))
+}
 
-    let Some(path) = path else {
+fn read_settings() -> Settings {
+    let Some(path) = settings_path() else {
         return Settings::default();
     };
-
     let Ok(contents) = fs::read_to_string(&path) else {
         return Settings::default();
     };
-
     serde_json::from_str(&contents).unwrap_or_default()
 }
 
 #[tauri::command]
+fn load_settings() -> Settings {
+    read_settings()
+}
+
+#[tauri::command]
 fn save_settings(settings: Settings) -> Result<(), String> {
-    let exe = std::env::current_exe().map_err(|e| e.to_string())?;
-    let path = exe
-        .parent()
-        .ok_or("Не вдалося визначити папку exe")?
-        .join("settings.json");
-
-    let json = serde_json::to_string_pretty(&settings)
-        .map_err(|e| e.to_string())?;
-
+    let path = settings_path().ok_or("Не вдалося визначити папку exe")?;
+    let json = serde_json::to_string_pretty(&settings).map_err(|e| e.to_string())?;
     fs::write(&path, json).map_err(|e| e.to_string())
 }
 
@@ -91,6 +89,26 @@ fn open_file_dialog(app: tauri::AppHandle) -> Result<Option<OpenedFile>, String>
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .setup(|app| {
+            let s = read_settings();
+            if let Some(window) = app.get_webview_window("main") {
+                if s.window_maximized {
+                    let _ = window.maximize();
+                } else {
+                    let _ = window.set_size(tauri::PhysicalSize::new(
+                        s.window_width as u32,
+                        s.window_height as u32,
+                    ));
+                    if let (Some(x), Some(y)) = (s.window_x, s.window_y) {
+                        let _ = window.set_position(tauri::PhysicalPosition::new(
+                            x as i32,
+                            y as i32,
+                        ));
+                    }
+                }
+            }
+            Ok(())
+        })
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_cli::init())
         .invoke_handler(tauri::generate_handler![read_file, open_file_dialog, load_settings, save_settings])

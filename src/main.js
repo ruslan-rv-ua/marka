@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { getCurrentWindow, PhysicalPosition, PhysicalSize } from "@tauri-apps/api/window";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import { getMatches } from "@tauri-apps/plugin-cli";
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
@@ -27,14 +27,9 @@ async function applySettings() {
   root.style.setProperty("--font-size", `${s.fontSize}px`);
   root.style.setProperty("--padding-x", `${s.paddingX}%`);
 
+  // Window geometry is restored in the Rust setup hook (before window is shown).
+  // Here we only register listeners to save future changes.
   const win = getCurrentWindow();
-  if (s.windowMaximized) {
-    await win.maximize();
-  } else if (s.windowX != null && s.windowY != null) {
-    await win.setPosition(new PhysicalPosition(s.windowX, s.windowY));
-    await win.setSize(new PhysicalSize(s.windowWidth, s.windowHeight));
-  }
-
   // UnlistenFn return values intentionally discarded — single-window app, no teardown needed
   await win.onResized(() => scheduleSave());
   await win.onMoved(() => scheduleSave());
