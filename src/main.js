@@ -34,6 +34,10 @@ async function applySettings() {
     await win.setPosition(new PhysicalPosition(s.windowX, s.windowY));
     await win.setSize(new PhysicalSize(s.windowWidth, s.windowHeight));
   }
+
+  // UnlistenFn return values intentionally discarded — single-window app, no teardown needed
+  await win.onResized(() => scheduleSave());
+  await win.onMoved(() => scheduleSave());
 }
 
 let saveTimer = null;
@@ -68,12 +72,14 @@ function changeFontSize(delta) {
   const current = parseFloat(getComputedStyle(root).getPropertyValue("--font-size"));
   const next = Math.min(72, Math.max(10, current + delta));
   root.style.setProperty("--font-size", `${next}px`);
+  scheduleSave();
 }
 
 function changePadding(delta) {
   const current = parseFloat(getComputedStyle(root).getPropertyValue("--padding-x"));
   const next = Math.min(25, Math.max(0, current + delta));
   root.style.setProperty("--padding-x", `${next}%`);
+  scheduleSave();
 }
 
 async function renderFile(filePath, preloadedContent) {
