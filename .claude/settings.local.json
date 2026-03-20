@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit:*)",
+      "Bash(magick --version)",
+      "Bash(magick identify:*)",
+      "Bash(magick convert:*)",
+      "Bash(ls -lah /c/dev/marka/src-tauri/icons/*.png)",
+      "Bash(identify /c/dev/marka/src-tauri/icons/32x32.png /c/dev/marka/src-tauri/icons/64x64.png /c/dev/marka/src-tauri/icons/128x128.png /c/dev/marka/src-tauri/icons/128x128@2x.png)",
+      "Bash(grep -E '\\\\.\\(png|ico|svg\\)$')",
+      "Bash(identify -verbose src-tauri/icons/icon.ico)",
+      "Bash(ls -la /c/dev/marka/assets/logo-*.png)",
+      "Bash(file /c/dev/marka/assets/logo-*.png)",
+      "Bash(identify -verbose /c/dev/marka/assets/logo-256x256.png)",
+      "Bash(identify -verbose /c/dev/marka/assets/logo-512x512.png)",
+      "Bash(find /c/dev/marka -name *.png -type f)",
+      "Bash(file assets/*.png)",
+      "Bash(identify assets/*.png)",
+      "Bash(pnpm build:*)",
+      "Bash(ls -lh /c/dev/marka/src-tauri/target/release/bundle/nsis/*.exe)",
+      "Bash(identify /c/dev/marka/src-tauri/icons/32x32.png /c/dev/marka/src-tauri/icons/128x128.png /c/dev/marka/src-tauri/icons/icon.ico)",
+      "Bash(identify /c/dev/marka/assets/logo-*.png)",
+      "Bash(find c:/dev/marka/src-tauri/target/release -name marka.exe -o -name *.nsis -o -name *.msi)",
+      "Bash(identify -verbose \"src-tauri/icons/32x32.png\" \"src-tauri/icons/64x64.png\" \"src-tauri/icons/128x128.png\" \"src-tauri/icons/128x128@2x.png\")",
+      "Bash(identify -verbose \"src-tauri/icons/32x32.png\")",
+      "Bash(identify -verbose \"assets/logo-512x512.png\")",
+      "Bash(grep -A 5 '\"\"icon\"\"' src-tauri/tauri.conf.json)"
+    ]
+  }
+}
