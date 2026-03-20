@@ -34,6 +34,23 @@ impl Default for Settings {
 }
 
 #[tauri::command]
+fn load_settings() -> Settings {
+    let path = std::env::current_exe()
+        .ok()
+        .and_then(|p| p.parent().map(|d| d.join("settings.json")));
+
+    let Some(path) = path else {
+        return Settings::default();
+    };
+
+    let Ok(contents) = std::fs::read_to_string(&path) else {
+        return Settings::default();
+    };
+
+    serde_json::from_str(&contents).unwrap_or_default()
+}
+
+#[tauri::command]
 fn read_file(path: String) -> Result<String, String> {
     fs::read_to_string(&path).map_err(|e| format!("Не вдалося прочитати файл: {}", e))
 }
@@ -62,7 +79,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_cli::init())
-        .invoke_handler(tauri::generate_handler![read_file, open_file_dialog])
+        .invoke_handler(tauri::generate_handler![read_file, open_file_dialog, load_settings])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
