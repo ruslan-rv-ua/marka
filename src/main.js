@@ -88,15 +88,7 @@ function changePadding(delta) {
   scheduleSave();
 }
 
-function announceCopy(text) {
-  const el = document.getElementById("copy-announcement");
-  if (!el) return;
-  el.textContent = text;
-  clearTimeout(pendingClearTimeout);
-  pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
-}
-
-function announceTheme(theme) {
+function getLiveRegion() {
   let el = document.getElementById("copy-announcement");
   if (!el) {
     el = document.createElement("div");
@@ -106,14 +98,25 @@ function announceTheme(theme) {
     el.className = "visually-hidden";
     document.body.appendChild(el);
   }
+  return el;
+}
+
+function announceCopy(text) {
+  const el = getLiveRegion();
+  el.textContent = text;
+  clearTimeout(pendingClearTimeout);
+  pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
+}
+
+function announceTheme(theme) {
+  const el = getLiveRegion();
   el.textContent = theme === "light" ? "Світла тема" : "Темна тема";
   clearTimeout(pendingClearTimeout);
   pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
 }
 
 function toggleTheme() {
-  const current = root.getAttribute("data-theme");
-  const next = current === "light" ? "dark" : "light";
+  const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
   if (next === "light") {
     root.setAttribute("data-theme", "light");
   } else {
@@ -128,15 +131,8 @@ async function renderFile(filePath, preloadedContent) {
     const markdown = preloadedContent ?? await invoke("read_file", { path: filePath });
     contentEl.innerHTML = marked.parse(markdown);
 
-    // Insert aria-live announcement region once
-    if (!document.getElementById("copy-announcement")) {
-      const liveEl = document.createElement("div");
-      liveEl.id = "copy-announcement";
-      liveEl.setAttribute("aria-live", "polite");
-      liveEl.setAttribute("aria-atomic", "true");
-      liveEl.className = "visually-hidden";
-      document.body.appendChild(liveEl);
-    }
+    // Ensure aria-live announcement region exists
+    getLiveRegion();
 
     // Add copy buttons after each non-empty code block
     const myGeneration = ++renderGeneration;
