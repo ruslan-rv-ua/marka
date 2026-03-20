@@ -1,116 +1,116 @@
-# Тестовий Маркдаун Файл
+# Test Markdown File
 
-Цей файл містить всі основні елементи маркдауну для тестування.
-
----
-
-## 1. Заголовки
-
-# Заголовок рівня 1 (H1)
-## Заголовок рівня 2 (H2)
-### Заголовок рівня 3 (H3)
-#### Заголовок рівня 4 (H4)
-##### Заголовок рівня 5 (H5)
-###### Заголовок рівня 6 (H6)
+This file contains all basic markdown elements for testing.
 
 ---
 
-## 2. Текстове форматування
+## 1. Headings
 
-Це **жирний текст** (bold)
-Це *курсивний текст* (italic)
-Це ***жирний і курсивний*** (bold and italic)
-Це ~~закреслений текст~~ (strikethrough)
-Це <u>підкреслений текст</u> (underlined)
-Це H<sub>2</sub>O (нижній індекс)
-Це E=mc<sup>2</sup> (верхній індекс)
+# Heading level 1 (H1)
+## Heading level 2 (H2)
+### Heading level 3 (H3)
+#### Heading level 4 (H4)
+##### Heading level 5 (H5)
+###### Heading level 6 (H6)
 
 ---
 
-## 3. Посилання
+## 2. Text Formatting
 
-### Зовнішні посилання
+This is **bold text** (bold)
+This is *italic text* (italic)
+This is ***bold and italic*** (bold and italic)
+This is ~~strikethrough text~~ (strikethrough)
+This is <u>underlined text</u> (underlined)
+This is H<sub>2</sub>O (subscript)
+This is E=mc<sup>2</sup> (superscript)
+
+---
+
+## 3. Links
+
+### External Links
 [Google](https://www.google.com)
 [GitHub](https://github.com)
 
-### Посилання з title атрибутом
-[Відкрити Google](https://www.google.com "Найпопулярніша пошукова система")
+### Links with title attribute
+[Open Google](https://www.google.com "Most popular search engine")
 
-### Посилання-заголовки (reference links)
+### Reference Links
 [Google][1]
 [GitHub][2]
 
 [1]: https://www.google.com "Google"
 [2]: https://github.com "GitHub"
 
-### Внутрішні посилання
-[Перейти до розділу про код](#7-блоки-кода)
+### Internal Links
+[Go to code section](#7-code-blocks)
 
 ---
 
-## 4. Зображення
+## 4. Images
 
-### Зовнішні зображення з placeholder
+### External images with placeholder
 ![Placeholder Image 1](https://via.placeholder.com/300x200)
 ![Placeholder Image 2](https://placehold.co/400x300)
 
-### Зображення з alt текстом і title
-![Логотип](https://via.placeholder.com/150x150 "Це логотип")
+### Image with alt text and title
+![Logo](https://via.placeholder.com/150x150 "This is a logo")
 
 ---
 
-## 5. Списки
+## 5. Lists
 
-### Нумеровані списки
-1. Перший пункт
-2. Другий пункт
-3. Третій пункт
-   1. Вкладений пункт 1
-   2. Вкладений пункт 2
-4. Четвертий пункт
+### Numbered Lists
+1. First item
+2. Second item
+3. Third item
+   1. Nested item 1
+   2. Nested item 2
+4. Fourth item
 
-### Марковані списки
-- Пункт A
-- Пункт B
-- Пункт C
-  - Вкладений пункт A1
-  - Вкладений пункт A2
-  - Вкладений пункт A3
-- Пункт D
+### Bulleted Lists
+- Item A
+- Item B
+- Item C
+  - Nested item A1
+  - Nested item A2
+  - Nested item A3
+- Item D
 
-### Змішані списки
-1. Перший пункт
-   - Вкладений маркований пункт
-   - Ще один маркований пункт
-2. Другий пункт
-   1. Вкладений нумерований пункт
-   2. Ще один нумерований пункт
-3. Третій пункт
-
----
-
-## 6. Таблиці
-
-### Проста таблиця
-| Ім'я | Прізвище | Вік |
-|------|----------|-----|
-| Іван | Петренко | 25 |
-| Марія | Коваль | 30 |
-| Петро | Шевченко | 35 |
-
-### Таблиця з вирівнюванням колонок
-| Зліва | По центру | Справа |
-|:------|:---------:|------:|
-| Текст | Текст | Текст |
-| Довгий текст | Довгий текст | Довгий текст |
-| Короткий | Короткий | Короткий |
+### Mixed Lists
+1. First item
+   - Nested bulleted item
+   - Another bulleted item
+2. Second item
+   1. Nested numbered item
+   2. Another numbered item
+3. Third item
 
 ---
 
-## 7. Блоки кода
+## 6. Tables
 
-### Інлайн код
-Це приклад `інлайн коду` в тексті.
+### Simple Table
+| First Name | Last Name | Age |
+|------------|-----------|-----|
+| Ivan | Petrenko | 25 |
+| Maria | Koval | 30 |
+| Petro | Shevchenko | 35 |
+
+### Table with column alignment
+| Left | Center | Right |
+|:-----|:------:|------:|
+| Text | Text | Text |
+| Long text | Long text | Long text |
+| Short | Short | Short |
+
+---
+
+## 7. Code Blocks
+
+### Inline Code
+This is an example of `inline code` in text.
 
 ### JavaScript
 ```javascript
@@ -126,7 +126,7 @@ const message = greet("Світ");
 ```python
 def greet(name):
     print(f"Привіт, {name}!")
-    return f"Вітаю, {name}"
+    return f"Вітаю, ${name}"
 
 message = greet("Світ")
 ```
@@ -164,139 +164,139 @@ fn main() {
 </html>
 ```
 
-### Блок кода без мови
+### Code block without language
 ```
-Це блок кода без вказання мови
-Він може містити будь-який текст
-Без підсвітки синтаксису
+This is a code block without specifying language
+It can contain any text
+Without syntax highlighting
 ```
 
 ---
 
-## 8. Цитати
+## 8. Blockquotes
 
-### Прості цитати
-> Це проста цитата.
-> Вона може займати кілька рядків.
+### Simple Blockquotes
+> This is a simple blockquote.
+> It can span multiple lines.
 
-### Вкладені цитати
-> Це зовнішня цитата.
+### Nested Blockquotes
+> This is an outer blockquote.
 >
-> > Це вкладена цитата.
+> > This is a nested blockquote.
 > >
-> > > Це ще одна вкладена цитата.
+> > > This is another nested blockquote.
 >
-> Повернення до зовнішньої цитати.
+> Return to the outer blockquote.
 
-### Цитати з іншими елементами
-> Це цитата з **жирним текстом** і *курсивом*.
+### Blockquotes with other elements
+> This is a blockquote with **bold text** and *italics*.
 >
-> Вона також може містити:
-> - Списки
-> - `Код`
-> - Інші елементи
+> It can also contain:
+> - Lists
+> - `Code`
+> - Other elements
 
 ---
 
-## 9. Горизонтальні лінії
+## 9. Horizontal Lines
 
-Текст до першої лінії
+Text before the first line
 
 ---
 
-Текст між лініями
+Text between lines
 
 ***
 
-Ще один роздільник
+Another separator
 
 ___
 
-І ще один
+And another one
 
 ---
 
-## 10. Екранування символів
+## 10. Escaping Characters
 
-Щоб відобразити символи маркдауну, їх потрібно екранувати:
+To display markdown characters, they need to be escaped:
 
-- Зірочка: \*
-- Підкреслення: \_
-- Квадратні дужки: \[ \]
-- Круглі дужки: \( \)
-- Гратки: \#
-- Знак плюс: \+
-- Знак мінус: \-
-- Крапка: \.
-- Знак оклику: \!
-- Зворотна коса риска: \\
+- Asterisk: \*
+- Underscore: \_
+- Square brackets: \[ \]
+- Parentheses: \( \)
+- Hash: \#
+- Plus sign: \+
+- Minus sign: \-
+- Period: \.
+- Exclamation mark: \!
+- Backslash: \\
 
 ---
 
-## 11. HTML теги
+## 11. HTML Tags
 
-Це приклад <strong>жирного тексту</strong> через HTML.
-Це <em>курсивний текст</em> через HTML.
-Це <mark>виділений текст</mark>.
-Це <code>код</code> через HTML.
+This is an example of <strong>bold text</strong> via HTML.
+This is <em>italic text</em> via HTML.
+This is <mark>highlighted text</mark>.
+This is <code>code</code> via HTML.
 
 <details>
-<summary>Натисніть, щоб розкрити</summary>
-Цей текст прихований за спойлером.
+<summary>Click to expand</summary>
+This text is hidden behind a spoiler.
 </details>
 
 ---
 
-## 12. Контрольні списки / Checkboxes
+## 12. Checkboxes
 
-- [x] Виконане завдання
-- [x] Ще одне виконане завдання
-- [ ] Невиконане завдання
-- [ ] Ще одне невиконане завдання
+- [x] Completed task
+- [x] Another completed task
+- [ ] Uncompleted task
+- [ ] Another uncompleted task
 
-Список покупок:
-- [x] Хліб
-- [x] Молоко
-- [ ] Яйця
-- [ ] Сир
+Shopping list:
+- [x] Bread
+- [x] Milk
+- [ ] Eggs
+- [ ] Cheese
 
 ---
 
-## 13. Короткі посилання (Reference Links)
+## 13. Reference Links
 
-Ми вже використовували їх вище, але ось ще приклади:
+We already used them above, but here are more examples:
 
 [Google][google]
 [GitHub][github]
 [Stack Overflow][stackoverflow]
 
-[google]: https://www.google.com "Пошукова система Google"
-[github]: https://github.com "Платформа для розробки"
-[stackoverflow]: https://stackoverflow.com "Сайт запитань та відповідей"
+[google]: https://www.google.com "Google search engine"
+[github]: https://github.com "Development platform"
+[stackoverflow]: https://stackoverflow.com "Questions and answers site"
 
 ---
 
-## 14. Заголовки з ID
+## 14. Headings with ID
 
-Деякі парсери підтримують додавання ID до заголовків:
+Some parsers support adding IDs to headings:
 
-### Заголовок з ID {#custom-id}
+### Heading with ID {#custom-id}
 
-Це заголовок з кастомним ID, на який можна посилатися.
+This is a heading with a custom ID that can be linked to.
 
-#### Ще один заголовок {#another-id}
+#### Another heading {#another-id}
 
-Ви можете посилатися на [заголовок з ID](#custom-id).
+You can link to [heading with ID](#custom-id).
 
 ---
 
-## Додаткові елементи
+## Additional Elements
 
-### Автоматичні посилання
+### Automatic Links
 <https://www.google.com>
 <example@example.com>
 
-### Код з синтаксисом та номерами рядків
+### Code with syntax and line numbers
 ```javascript {lineNumbers: true}
 function fibonacci(n) {
     if (n <= 1) return n;
@@ -304,10 +304,10 @@ function fibonacci(n) {
 }
 ```
 
-### Висновки
+### Conclusions
 
-Цей тестовий файл демонструє всі основні елементи маркдауну, які можуть бути використані для тестування рендерингу markdown контенту.
+This test file demonstrates all basic markdown elements that can be used to test markdown content rendering.
 
 ---
 
-**Кінець тестового файлу** 🎉
+**End of test file** 🎉
