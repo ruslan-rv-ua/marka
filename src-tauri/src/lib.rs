@@ -7,6 +7,32 @@ pub struct OpenedFile {
     content: String,
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase", default)]
+pub struct Settings {
+    pub font_size: f64,
+    pub padding_x: f64,
+    pub window_width: f64,
+    pub window_height: f64,
+    pub window_x: Option<f64>,
+    pub window_y: Option<f64>,
+    pub window_maximized: bool,
+}
+
+impl Default for Settings {
+    fn default() -> Self {
+        Self {
+            font_size: 16.0,
+            padding_x: 10.0,
+            window_width: 800.0,
+            window_height: 600.0,
+            window_x: None,
+            window_y: None,
+            window_maximized: false,
+        }
+    }
+}
+
 #[tauri::command]
 fn read_file(path: String) -> Result<String, String> {
     fs::read_to_string(&path).map_err(|e| format!("Не вдалося прочитати файл: {}", e))
