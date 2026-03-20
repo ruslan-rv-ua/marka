@@ -178,3 +178,47 @@ img {
 .hljs-meta { color: #c9f; }
 
 .hljs-variable { color: #f0f0f0; }
+
+/* Visually hidden — used by aria-live announcement region */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* When a pre is followed by a copy button, the button owns the bottom spacing */
+pre:has(+ .copy-btn) {
+  margin-bottom: 0;
+}
+
+.copy-btn {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 1em;
+  padding: 4px 10px;
+  font-family: inherit;
+  font-size: 0.85em;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  border-color: var(--accent);
+  background: rgba(102, 204, 255, 0.08);
+}
+
+.copy-btn:focus-visible {
+  border-color: var(--accent);
+  background: rgba(102, 204, 255, 0.08);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
