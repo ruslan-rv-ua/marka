@@ -73,7 +73,6 @@ async function renderFile(filePath, preloadedContent) {
       btn.textContent = "Копіювати";
       btn.addEventListener("click", async () => {
         const codeEl = pre.querySelector("code") ?? pre;
-        clearTimeout(pendingClearTimeout);
         try {
           await navigator.clipboard.writeText(codeEl.textContent);
           if (renderGeneration === myGeneration) announceCopy("Код скопійовано");
