@@ -226,9 +226,12 @@ async function renderFile(filePath, preloadedContent) {
     });
 
     // Make code blocks accessible for NVDA
+    codeBlockIndex = 0;  // Reset counter for second pass
     contentEl.querySelectorAll("pre").forEach((pre) => {
+      if (pre.textContent.trim() === "") return;  // Match copy loop filter
+      codeBlockIndex++;
       pre.setAttribute("role", "region");
-      pre.setAttribute("aria-label", t("code.label"));
+      pre.setAttribute("aria-label", t("code.label", { index: codeBlockIndex }));
       pre.setAttribute("tabindex", "0");
     });
 
