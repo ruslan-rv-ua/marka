@@ -1,0 +1,11 @@
+{
+  "theme.light": "Light theme",
+  "theme.dark": "Dark theme",
+  "copy.button": "Copy code {index}",
+  "copy.success": "Code copied",
+  "copy.error": "Copy error",
+  "code.label": "Code block",
+  "initial.message": "Press Ctrl+O to open a file.",
+  "document.label": "Document content",
+  "error.prefix": "Error: "
+}

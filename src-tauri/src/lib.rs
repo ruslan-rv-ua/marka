@@ -2,6 +2,9 @@ use tauri::Manager;
 use tauri_plugin_dialog::DialogExt;
 use std::fs;
 
+const LOCALE_UK: &str = include_str!("locales/uk.json");
+const LOCALE_EN: &str = include_str!("locales/en.json");
+
 #[derive(serde::Serialize)]
 pub struct OpenedFile {
     path: String,
@@ -13,6 +16,7 @@ pub struct OpenedFile {
 pub struct Settings {
     pub font_size: f64,
     pub padding_x: f64,
+    pub locale: String,
     pub window_width: f64,
     pub window_height: f64,
     pub window_x: Option<f64>,
@@ -26,6 +30,7 @@ impl Default for Settings {
         Self {
             font_size: 16.0,
             padding_x: 10.0,
+            locale: String::new(),  // Empty on first run, will be detected and set by initializeLocale()
             window_width: 800.0,
             window_height: 600.0,
             window_x: None,
@@ -88,6 +93,32 @@ fn open_file_dialog(app: tauri::AppHandle) -> Result<Option<OpenedFile>, String>
     }
 }
 
+#[tauri::command]
+fn detect_system_locale() -> String {
+    use sys_locale::get_locale;
+    match get_locale() {
+        Some(locale) => {
+            // Windows returns "uk-UA", "uk_UA", or "uk" for Ukrainian
+            let lower_locale = locale.to_lowercase();
+            if lower_locale.starts_with("uk") {
+                "uk".to_string()
+            } else {
+                "en".to_string()
+            }
+        }
+        None => "en".to_string(),
+    }
+}
+
+#[tauri::command]
+fn get_translations(locale: String) -> Result<serde_json::Value, String> {
+    let json_str = match locale.as_str() {
+        "uk" => LOCALE_UK,
+        _ => LOCALE_EN,
+    };
+    serde_json::from_str(json_str).map_err(|e| e.to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -113,7 +144,14 @@ pub fn run() {
         })
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_cli::init())
-        .invoke_handler(tauri::generate_handler![read_file, open_file_dialog, load_settings, save_settings])
+        .invoke_handler(tauri::generate_handler![
+            read_file,
+            open_file_dialog,
+            load_settings,
+            save_settings,
+            detect_system_locale,
+            get_translations,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
