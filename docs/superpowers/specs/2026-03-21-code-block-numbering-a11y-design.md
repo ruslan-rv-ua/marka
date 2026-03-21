@@ -26,14 +26,14 @@ Goal: Make code blocks numbered for screen readers only, so NVDA announces "Ко
 
 ## Implementation Scope
 
-**Files changed:** 2
+**Files changed:** 3
 - `src-tauri/src/locales/uk.json` — update `code.label` translation
 - `src-tauri/src/locales/en.json` — update `code.label` translation
-- `src/main.js` — pass `codeBlockIndex` to `t("code.label", { index: codeBlockIndex })`
+- `src/main.js` — modify code block accessibility loop to use numbered aria-labels
 
 **Lines affected:**
 - Locales: 1 line per file (translation key change)
-- main.js: 1 line change (line ~231 in the code block accessibility loop)
+- main.js: lines 228-233 (code block accessibility loop — reuse existing `codeBlockIndex` counter from copy button loop)
 
 ---
 
@@ -51,24 +51,48 @@ Goal: Make code blocks numbered for screen readers only, so NVDA announces "Ко
 "code.label": "Code {index} — region"
 ```
 
+**Note on em-dash:** The em-dash (—) before "регіон"/"region" is intentional. The user (a blind NVDA user) requested this phrasing specifically because the em-dash creates a short pause that improves comprehension when listening to the aria-label. This deviates from standard ARIA conventions (which typically omit punctuation in labels), but is explicitly chosen based on the user's accessibility experience.
+
 ### Code Change in `main.js`
 
-In the code block accessibility loop (currently lines 228–233):
+**Strategy:** Move the `codeBlockIndex` declaration *before* the copy button loop (line 203) so both loops share the same counter. This ensures copy buttons and aria-labels have synchronized numbering.
 
-**Current:**
+**Current state (lines 201–233):**
 ```javascript
+// Line 201–226: Copy button loop
+const myGeneration = ++renderGeneration;
+let codeBlockIndex = 0;  // ← declared here
+contentEl.querySelectorAll("pre").forEach((pre) => {
+  if (pre.textContent.trim() === "") return;
+  codeBlockIndex++;
+  // ... create copy button with aria-label: t("copy.button", { index: codeBlockIndex })
+});
+
+// Line 228–233: Code block accessibility loop (SEPARATE LOOP, uses new counter)
 contentEl.querySelectorAll("pre").forEach((pre) => {
   pre.setAttribute("role", "region");
-  pre.setAttribute("aria-label", t("code.label"));  // ← generic label
+  pre.setAttribute("aria-label", t("code.label"));  // ← generic label, no index
   pre.setAttribute("tabindex", "0");
 });
 ```
 
-**Updated:**
+**Updated (refactored for counter reuse):**
 ```javascript
-let codeBlockIndex = 0;  // ← reuse existing counter from copy button loop
+// Line 201–202: Move counter declaration here, before both loops
+const myGeneration = ++renderGeneration;
+let codeBlockIndex = 0;  // ← shared counter for both loops
+
+// First loop: add copy buttons (lines 203–226)
 contentEl.querySelectorAll("pre").forEach((pre) => {
-  if (pre.textContent.trim() === "") return;  // ← skip empty blocks (like copy button loop)
+  if (pre.textContent.trim() === "") return;
+  codeBlockIndex++;
+  // ... create copy button with aria-label: t("copy.button", { index: codeBlockIndex })
+});
+
+// Second loop: set code block aria-labels (lines 228–233)
+codeBlockIndex = 0;  // ← reset counter for second pass
+contentEl.querySelectorAll("pre").forEach((pre) => {
+  if (pre.textContent.trim() === "") return;  // ← must filter identically
   codeBlockIndex++;
   pre.setAttribute("role", "region");
   pre.setAttribute("aria-label", t("code.label", { index: codeBlockIndex }));  // ← numbered label
@@ -76,7 +100,7 @@ contentEl.querySelectorAll("pre").forEach((pre) => {
 });
 ```
 
-**Note:** The existing loop structure (lines 203–226) already counts non-empty code blocks in `codeBlockIndex`. The accessibility loop can reuse this same counter to ensure both copy buttons and aria-labels have matching numbers.
+**Critical:** Both loops must filter identically (`if (pre.textContent.trim() === "") return;`), iterate in the same order, and increment the counter in the same sequence to ensure copy button numbers and aria-label numbers stay synchronized.
 
 ---
 
@@ -128,8 +152,8 @@ No database changes, no migrations, no structural changes — fully reversible.
 
 ## Related Code
 
-- Copy button numbering: `main.js` lines 203–210
-- Current code block accessibility: `main.js` lines 228–233
-- Translation system: `src/i18n.js` (simple parameter replacement via `{index}`)
+- Copy button numbering loop: `main.js` lines 203–226 (full loop including createElement, aria-label, event handler)
+- Current code block accessibility loop: `main.js` lines 228–233 (sets role, aria-label, tabindex)
+- Translation system: `src/i18n.js` lines 22–27 (simple parameter replacement via `{index}`)
 - Locales structure: `src-tauri/src/locales/{uk,en}.json`
 
