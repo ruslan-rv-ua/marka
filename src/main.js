@@ -187,9 +187,11 @@ function toggleTheme() {
 }
 
 async function renderFile(filePath, preloadedContent) {
+  currentFilePath = filePath;
   try {
     const markdown = preloadedContent ?? await invoke("read_file", { path: filePath });
     contentEl.innerHTML = marked.parse(markdown);
+    fixMediaSrc();
 
     // Ensure aria-live announcement region exists
     getLiveRegion();
@@ -264,10 +266,11 @@ contentEl.addEventListener("click", (e) => {
   } else {
     // Local file → open in Marka + add to history
     e.preventDefault();
-    renderFile(href);
+    const absPath = currentFilePath ? resolvePath(href) : href;
+    renderFile(absPath);
     // Add to history if not already present
-    if (!fileHistory.includes(href)) {
-      fileHistory.push(href);
+    if (!fileHistory.includes(absPath)) {
+      fileHistory.push(absPath);
     }
   }
 });
