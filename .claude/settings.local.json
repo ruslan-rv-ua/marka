@@ -26,7 +26,10 @@
       "Bash(identify -verbose \"assets/logo-512x512.png\")",
       "Bash(grep -A 5 '\"\"icon\"\"' src-tauri/tauri.conf.json)",
       "Bash(node -c /c/dev/marka/src/i18n.js)",
-      "Bash(node -c src/main.js)"
+      "Bash(node -c src/main.js)",
+      "Bash(python3 -c \":*)",
+      "Bash(python3:*)",
+      "Read(//c/Users/Руслан/**)"
     ]
   }
 }
