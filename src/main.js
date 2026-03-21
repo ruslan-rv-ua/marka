@@ -220,6 +220,34 @@ async function renderFile(filePath, preloadedContent) {
   }
 }
 
+// In-memory history of opened files (cleared on app exit)
+const fileHistory = [];
+
+// Handle clicks on links in Markdown content
+contentEl.addEventListener("click", (e) => {
+  const link = e.target.closest("a");
+  if (!link) return;
+
+  const href = link.getAttribute("href");
+  if (!href) return;
+
+  if (href.startsWith("http://") || href.startsWith("https://")) {
+    // External URL → open in default browser
+    e.preventDefault();
+    invoke("open_url", { url: href }).catch((err) => {
+      console.error("Failed to open URL:", err);
+    });
+  } else {
+    // Local file → open in Marka + add to history
+    e.preventDefault();
+    renderFile(href);
+    // Add to history if not already present
+    if (!fileHistory.includes(href)) {
+      fileHistory.push(href);
+    }
+  }
+});
+
 document.addEventListener("keydown", async (e) => {
   if (e.ctrlKey && e.code === "KeyO") {
     e.preventDefault();
