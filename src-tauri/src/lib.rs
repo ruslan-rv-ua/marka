@@ -152,13 +152,13 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_cli::init())
         .invoke_handler(tauri::generate_handler![
-            read_file,
-            open_file_dialog,
-            open_url,
-            load_settings,
-            save_settings,
             detect_system_locale,
             get_translations,
+            load_settings,
+            open_file_dialog,
+            open_url,
+            read_file,
+            save_settings,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
