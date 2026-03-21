@@ -14,6 +14,8 @@ function isExternal(href) {
 
 function resolvePath(href) {
   if (!currentFilePath) return href;
+  // Already an absolute Windows path — return as-is
+  if (/^[a-zA-Z]:[/\\]/.test(href)) return href;
   const base = 'file:///' + currentFilePath.replace(/\\/g, '/');
   const resolved = new URL(href, base);
   // pathname is like "/c:/dev/.../file.png" — strip leading "/" and restore backslashes
@@ -24,7 +26,7 @@ function fixMediaSrc() {
   if (!currentFilePath) return;
   contentEl.querySelectorAll('img[src], video[src], audio[src], source[src]').forEach((el) => {
     const src = el.getAttribute('src');
-    if (!isExternal(src)) {
+    if (src && !isExternal(src) && !src.startsWith('data:') && !src.startsWith('blob:')) {
       el.setAttribute('src', convertFileSrc(resolvePath(src)));
     }
   });
@@ -257,7 +259,7 @@ contentEl.addEventListener("click", (e) => {
   const href = link.getAttribute("href");
   if (!href) return;
 
-  if (href.startsWith("http://") || href.startsWith("https://")) {
+  if (isExternal(href)) {
     // External URL → open in default browser
     e.preventDefault();
     invoke("open_url", { url: href }).catch((err) => {
