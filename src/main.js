@@ -3,7 +3,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { getMatches } from "@tauri-apps/plugin-cli";
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
-import hljs from "highlight.js";
+import hljs from "highlight.js/lib/common";
 import { initI18n, t, getLocale } from "./i18n.js";
 
 let currentFilePath = null;

@@ -6,7 +6,8 @@
   "scripts": {
     "tauri": "tauri",
     "dev": "tauri dev",
-    "build": "tauri build",
+    "build": "tauri build --no-bundle",
+    "build:fast": "tauri build --profile release-fast --no-bundle",
     "vite:dev": "vite dev --port 1420",
     "vite:build": "vite build"
   },

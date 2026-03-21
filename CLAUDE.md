@@ -5,11 +5,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-pnpm dev          # Start Tauri dev (launches Vite + Rust watcher)
-pnpm build --no-bundle  # Production release build (no installer)
-pnpm vite:dev     # Frontend-only dev server on port 1420
-pnpm vite:build   # Frontend-only build to /dist
+just dev          # Start Tauri dev (launches Vite + Rust watcher)
+just build        # Production build — minimal exe (slow compile)
+just build-fast   # Release build — fast compile (larger exe)
+just vite-dev     # Frontend-only dev server on port 1420
+just vite-build   # Frontend-only build to /dist
+just clean        # Clean Rust build artifacts
 ```
+
+> App is portable — no installer. `--no-bundle` is always used.
 
 No test suite is configured.
 
