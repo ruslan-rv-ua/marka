@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/logo-256x256.png" width="128" alt="Marka logo" />
   <h1>Marka</h1>
-  <p><em>Minimal Markdown viewer for Windows with accessibility first</em></p>
+  <p><em>Minimal Markdown viewer for Windows, built with accessibility in mind</em></p>
   <p>
     <a href="readme.uk.md">🇺🇦 Українська</a>
   </p>
@@ -17,39 +17,39 @@
 
 ## About
 
-**Marka** is a portable Markdown file viewer for Windows, built with [Tauri](https://tauri.app/) and designed with **accessibility first**. It offers full screen reader support (NVDA) and keyboard navigation.
+**Marka** is a portable Markdown file viewer for Windows, built with [Tauri](https://tauri.app/) and optimized for **accessibility**. It offers full screen reader support (NVDA) and keyboard navigation.
 
-- **No installer** — portable single `.exe` file
-- **Accessibility first** — NVDA screen reader optimized
+- **Portable** — single `.exe` file, no installer needed
+- **Accessibility first** — optimized for NVDA screen readers
 - **Auto-localization** — detects Windows language (English / Ukrainian)
-- **Lightweight** — minimal dependencies, fast startup
+- **Lightweight** — minimal dependencies and fast startup
 
 ## Features
 
-- 📖 **Markdown rendering** — headings, tables, lists, blockquotes
+- 📖 **Markdown rendering** — headings, tables, lists, and blockquotes
 - 💻 **Code blocks** — syntax highlighting via [highlight.js](https://highlightjs.org/) with copy buttons
-- 🖼️ **Media embedding** — images, video, audio from local paths
-- 🔗 **Navigation** — `.md` links open in-app; external URLs open in browser
-- 🎨 **Theme toggle** — dark/light mode (Ctrl+T), persistent settings
-- 🔤 **Font size** — adjustable 10–72px (Ctrl+= / Ctrl+-)
-- 📏 **Padding control** — horizontal padding adjustment (Ctrl+[ / Ctrl+])
-- ⚙️ **Persistent settings** — saved next to the executable
-- 📌 **File associations** — `.md` files automatically open with Marka
+- 🖼️ **Local media** — support for images, video, and audio from local paths
+- 🔗 **Navigation** — `.md` links open in-app; external URLs open in your browser
+- 🎨 **Theme toggle** — switch between dark and light modes (Ctrl+T)
+- 🔤 **Adjustable font** — 10–72px font size (Ctrl+= / Ctrl+-)
+- 📏 **Interface padding** — adjust horizontal padding (Ctrl+[ / Ctrl+])
+- ⚙️ **Auto-save settings** — configuration is saved next to the executable
+- 📌 **File associations** — `.md` files can be opened directly with Marka
 - 💬 **CLI support** — `marka.exe path\to\file.md`
 
 ## Accessibility
 
-Marka is built for screen reader users, with first-class NVDA support:
+Marka is designed specifically for screen reader users, with first-class NVDA support:
 
-- **Document structure** — main content marked with `role="document"` and keyboard-navigable with proper focus management
-- **Code block landmarks** — every `<pre>` block is a keyboard-accessible region with descriptive ARIA labels
-- **Live announcements** — copy actions, theme changes, and errors announced via `aria-live` regions
-- **Error handling** — errors marked with `role="alert"` for immediate announcement
-- **Keyboard navigation** — all features accessible via keyboard; shortcuts use layout-independent keycodes (works with any keyboard layout)
-- **Localization** — all UI text in Ukrainian or English based on Windows system language
-- **Focus restoration** — automatic focus reset to content after file load, triggering NVDA virtual buffer refresh
+- **Document structure** — main content uses `role="document"` for proper focus management and navigation
+    - **Code block landmarks** — every `<pre>` block is a keyboard-accessible region with descriptive ARIA labels
+- **Dynamic notifications** — copy actions, theme changes, and errors are announced via `aria-live` regions
+- **Error handling** — errors are marked with `role="alert"` for immediate announcement
+- **Keyboard navigation** — all features are accessible via keyboard; shortcuts use layout-independent keycodes
+- **Localization** — user interface adapts to Ukrainian or English based on system settings
+- **Focus restoration** — automatic focus reset to content after loading a file to refresh the NVDA virtual buffer
 
-See **Keyboard Shortcuts** section below for full list.
+See the **Keyboard Shortcuts** section below for the full list.
 
 ## Installation
 
@@ -101,7 +101,6 @@ This method automatically manages updates and persists your settings.
 | **Ctrl+]** | Increase horizontal padding (+5%, max 25%) |
 | **Ctrl+T** | Toggle dark/light theme |
 | **Escape** | Close the window |
-| **Tab** | Focus code block copy buttons and landmarks |
 
 **Note:** All shortcuts use layout-independent keycodes and work with any keyboard layout (QWERTY, AZERTY, Cyrillic, etc.).
 
@@ -116,7 +115,7 @@ This method automatically manages updates and persists your settings.
 
 ### Development
 
-**With just (task runner):**
+**Using just (recommended):**
 
 ```bash
 pnpm install
@@ -135,7 +134,7 @@ cargo tauri dev    # Start Tauri dev server
 
 ### Production Build
 
-**With just:**
+**Using just:**
 
 ```bash
 just build         # Optimized build (slower, minimal exe size)
@@ -149,7 +148,7 @@ pnpm vite:build
 cargo tauri build --release
 ```
 
-Built executables are in `src-tauri/target/release/`.
+The resulting executables are located in `src-tauri/target/release/`.
 
 ## Credits
 
@@ -171,4 +170,4 @@ and use by the aggressor state. See [LICENSE](LICENSE) for details.
 
 ---
 
-**Made for accessibility. Built for everyone.**
+**Designed for accessibility. Built for everyone.**
