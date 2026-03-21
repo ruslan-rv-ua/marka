@@ -26,6 +26,34 @@ When bumping version, update all three files to the same version:
 
 Current version: `0.1.0`
 
+## Release & CI/CD
+
+**Automated Release Process:**
+- Tag: `git tag v0.1.0 && git push --tags`
+- Workflow: `.github/workflows/release.yml` (triggers automatically)
+- Output: GitHub Release + ZIP + SHA256 + Scoop bucket update
+
+**Manual Trigger (if automation fails):**
+- GitHub → Actions → Release → Run workflow
+- Enter version (e.g., `0.1.1`) and optional pre-release flag
+
+**Pre-release Tags:**
+- `v0.1.0-alpha`, `v0.1.0-beta`, `v0.1.0-rc` → GitHub Release only
+- No Scoop update for pre-releases (stable bucket only)
+
+**Version Sync Required:**
+When bumping version, update all three files to same value:
+- `package.json` → `"version"`
+- `src-tauri/tauri.conf.json` → `"version"`
+- `src-tauri/Cargo.toml` → `version =`
+
+Then: `git tag v{version} && git push --tags`
+
+**Scoop Integration:**
+- Manifest: `scoop-bucket/bucket/marka.json`
+- Auto-updated by `update-scoop-manifest.yml` on each stable release
+- Token: `SCOOP_BUCKET_TOKEN` (GitHub secret, stored in Actions)
+
 ## Git Workflow
 
 This project uses **git-flow** branching model:
