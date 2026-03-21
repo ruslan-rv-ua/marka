@@ -164,6 +164,11 @@ Built with:
 
 Found a bug or have a suggestion? Open an [issue](https://github.com/ruslan-rv-ua/marka/issues) on GitHub.
 
+## License
+
+Distributed under a modified MIT License that prohibits Russian localization
+and use by the aggressor state. See [LICENSE](LICENSE) for details.
+
 ---
 
 **Made for accessibility. Built for everyone.**
