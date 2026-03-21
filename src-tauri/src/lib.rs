@@ -1,6 +1,7 @@
 use tauri::Manager;
 use tauri_plugin_dialog::DialogExt;
 use std::fs;
+use open;
 
 const LOCALE_UK: &str = include_str!("locales/uk.json");
 const LOCALE_EN: &str = include_str!("locales/en.json");
@@ -72,6 +73,12 @@ fn save_settings(settings: Settings) -> Result<(), String> {
 #[tauri::command]
 fn read_file(path: String) -> Result<String, String> {
     fs::read_to_string(&path).map_err(|e| format!("Не вдалося прочитати файл: {}", e))
+}
+
+#[tauri::command]
+fn open_url(url: String) -> Result<(), String> {
+    open::that(&url)
+        .map_err(|e| format!("Не вдалося відкрити посилання: {}", e))
 }
 
 #[tauri::command]
@@ -147,6 +154,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             read_file,
             open_file_dialog,
+            open_url,
             load_settings,
             save_settings,
             detect_system_locale,
