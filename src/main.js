@@ -1,10 +1,34 @@
-import { invoke } from "@tauri-apps/api/core";
+import { invoke, convertFileSrc } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { getMatches } from "@tauri-apps/plugin-cli";
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
 import { initI18n, t, getLocale } from "./i18n.js";
+
+let currentFilePath = null;
+
+function isExternal(href) {
+  return href.startsWith('http://') || href.startsWith('https://');
+}
+
+function resolvePath(href) {
+  if (!currentFilePath) return href;
+  const base = 'file:///' + currentFilePath.replace(/\\/g, '/');
+  const resolved = new URL(href, base);
+  // pathname is like "/c:/dev/.../file.png" — strip leading "/" and restore backslashes
+  return decodeURIComponent(resolved.pathname.replace(/^\//, '').replace(/\//g, '\\'));
+}
+
+function fixMediaSrc() {
+  if (!currentFilePath) return;
+  contentEl.querySelectorAll('img[src], video[src], audio[src], source[src]').forEach((el) => {
+    const src = el.getAttribute('src');
+    if (!isExternal(src)) {
+      el.setAttribute('src', convertFileSrc(resolvePath(src)));
+    }
+  });
+}
 
 // Configure marked with highlight.js via marked-highlight extension
 const marked = new Marked(
