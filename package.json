@@ -2,7 +2,6 @@
   "name": "marka",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "tauri": "tauri",
     "dev": "tauri dev",

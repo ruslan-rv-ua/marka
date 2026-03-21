@@ -54,29 +54,20 @@ const contentEl = document.getElementById("content");
 const root = document.documentElement;
 
 async function initializeLocale() {
-  console.log("initializeLocale: Starting...");
   const settings = await invoke("load_settings");
-  console.log("initializeLocale: Loaded settings:", settings);
 
   // Якщо локаль не встановлена — перший запуск
   if (!settings.locale || settings.locale === "") {
-    console.log("initializeLocale: No locale found, detecting system locale...");
     const detectedLocale = await invoke("detect_system_locale");
-    console.log("initializeLocale: Detected locale:", detectedLocale);
     settings.locale = detectedLocale;
-    console.log("initializeLocale: Saving settings...", settings);
     try {
       await invoke("save_settings", { settings });
-      console.log("initializeLocale: Settings saved successfully");
     } catch (err) {
       console.error("initializeLocale: Error saving settings:", err);
     }
-  } else {
-    console.log("initializeLocale: Locale already set to:", settings.locale);
   }
 
   // Ініціалізувати i18n
-  console.log("initializeLocale: Initializing i18n with locale:", settings.locale);
   await initI18n(settings.locale);
 
   // Встановити lang атрибут на документі
@@ -85,7 +76,6 @@ async function initializeLocale() {
   // Set dynamic content
   document.getElementById("initial-message").textContent = t("initial.message");
   document.querySelector('main[role="document"]').setAttribute("aria-label", t("document.label"));
-  console.log("initializeLocale: Complete");
 }
 
 async function applySettings() {
@@ -255,9 +245,6 @@ async function renderFile(filePath, preloadedContent) {
   }
 }
 
-// In-memory history of opened files (cleared on app exit)
-const fileHistory = [];
-
 // Handle clicks on links in Markdown content
 contentEl.addEventListener("click", (e) => {
   const link = e.target.closest("a");
@@ -273,14 +260,10 @@ contentEl.addEventListener("click", (e) => {
       console.error("Failed to open URL:", err);
     });
   } else {
-    // Local file → open in Marka + add to history
+    // Local file → open in Marka
     e.preventDefault();
     const absPath = currentFilePath ? resolvePath(href) : href;
     renderFile(absPath);
-    // Add to history if not already present
-    if (!fileHistory.includes(absPath)) {
-      fileHistory.push(absPath);
-    }
   }
 });
 
