@@ -52,10 +52,9 @@ git tag v0.1.0 && git push --tags
 - **Example**: `marka-0.1.0-windows-x64.zip`
 - **Contents**:
   ```
-  marka/
-  ├─ marka.exe
-  ├─ LICENSE
-  └─ README.md
+  marka.exe
+  LICENSE
+  README.md
   ```
 - **Hash**: SHA256 computed by workflow, stored in `{zipname}.sha256` file
 - **Size**: ~3.7 MB (already optimized with LTO, strip, highlight.js common preset)
@@ -106,9 +105,9 @@ git tag v0.1.0 && git push --tags
    - App ID (lowercase): `marka`
 
 4. **Package (PowerShell)**
-   - Create `marka/` directory
-   - Copy: `marka.exe`, `LICENSE`, `README.md`
-   - `Compress-Archive marka → marka-0.1.0-windows-x64.zip`
+   - Create temp directory
+   - Copy: `marka.exe`, `LICENSE`, `README.md` into root
+   - `Compress-Archive → marka-0.1.0-windows-x64.zip`
    - Compute SHA256 → `marka-0.1.0-windows-x64.zip.sha256`
 
 5. **Publish Release**
@@ -179,7 +178,6 @@ git tag v0.1.0 && git push --tags
       "hash": "sha256_will_be_filled_by_workflow"
     }
   },
-  "extract_dir": "marka",
   "bin": "marka.exe",
   "shortcuts": [
     ["marka.exe", "Marka"]
