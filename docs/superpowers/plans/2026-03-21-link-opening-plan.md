@@ -32,7 +32,7 @@ Look for `[dependencies]` section (around line 12-20)
 
 - [ ] **Step 2: Add open crate**
 
-After existing dependencies, add:
+After `sys-locale = "0.3"` (line 21), add:
 ```toml
 open = "5.0"
 ```
@@ -40,10 +40,9 @@ open = "5.0"
 **Complete dependencies section should look like:**
 ```toml
 [dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "2", features = ["macos-private-api", "protocol-multipart"] }
-tauri-build = "2"
 tauri-plugin-dialog = "2"
 tauri-plugin-cli = "2"
 sys-locale = "0.3"
@@ -147,48 +146,55 @@ git commit -m "feat: add open_url command to open URLs in system browser"
 ## Task 3: Add Link Click Handler & History to Frontend
 
 **Files:**
-- Modify: `src/main.js:108-110` (add fileHistory array)
-- Modify: `src/main.js:221-223` (add event listener after renderFile function)
+- Modify: `src/main.js` lines 221-223
 
 - [ ] **Step 1: Add fileHistory array after renderFile function**
 
-Find the end of `renderFile()` function (line 221, after the closing `}`).
-
-After that closing brace, add:
+Find line 221 (closing `}` of `renderFile()` function).
+After line 221, insert blank line and add:
 
 ```javascript
 // In-memory history of opened files (cleared on app exit)
 const fileHistory = [];
 ```
 
+**Location:** Between line 221 (`}` end of renderFile) and line 223 (`document.addEventListener("keydown"...`)
+
 - [ ] **Step 2: Add click event listener**
 
-After the fileHistory array (around line 224), add:
+After the fileHistory array (after new line with `];`), add:
 
 ```javascript
 // Handle clicks on links in Markdown content
 contentEl.addEventListener("click", (e) => {
-  if (e.target.tagName === "A") {
-    const href = e.target.getAttribute("href");
+  const link = e.target.closest("a");
+  if (!link) return;
 
-    if (href.startsWith("http://") || href.startsWith("https://")) {
-      // External URL → open in default browser
-      e.preventDefault();
-      invoke("open_url", { url: href });
-    } else {
-      // Local file → open in Marka + add to history
-      e.preventDefault();
-      renderFile(href);
-      // Add to history if not already present
-      if (!fileHistory.includes(href)) {
-        fileHistory.push(href);
-      }
+  const href = link.getAttribute("href");
+  if (!href) return;
+
+  if (href.startsWith("http://") || href.startsWith("https://")) {
+    // External URL → open in default browser
+    e.preventDefault();
+    invoke("open_url", { url: href }).catch((err) => {
+      console.error("Failed to open URL:", err);
+    });
+  } else {
+    // Local file → open in Marka + add to history
+    e.preventDefault();
+    renderFile(href);
+    // Add to history if not already present
+    if (!fileHistory.includes(href)) {
+      fileHistory.push(href);
     }
   }
 });
 ```
 
-**Exact location:** After `renderFile()` function closes (line 221), before `document.addEventListener("keydown", ...)` (line 223)
+**Key improvements:**
+- Uses `e.target.closest("a")` instead of `tagName ===` to handle nested elements
+- Added null check for `href`
+- Added `.catch()` for error logging per spec requirement
 
 - [ ] **Step 3: Verify code placement**
 
@@ -222,14 +228,22 @@ git commit -m "feat: add link click handler and session history"
 - [ ] **Step 2:** Click the link
 - [ ] **Expected:** System default browser opens with that URL, app stays open
 
-**Test 2: Local file with absolute path opens in Marka**
+**Test 2: History array exists (basic check)**
+
+- [ ] **Step 1:** With dev tools open (F12), go to Console tab
+- [ ] **Step 2:** Type: `fileHistory` and press Enter
+- [ ] **Expected:** Output shows `[]` (empty array), no errors
+
+**Test 3: Local file with absolute path opens in Marka**
 
 - [ ] **Step 1:** Create a test Markdown file: `c:\test\file1.md` with content:
 ```markdown
 # Test File 1
 Content here
-[Link to file 2](c:\test\file2.md)
+[Link to file 2](c:/test/file2.md)
 ```
+
+**Note:** Use forward slashes (`/`) in Markdown links, not backslashes.
 
 - [ ] **Step 2:** Create second file: `c:\test\file2.md` with content:
 ```markdown
@@ -241,32 +255,26 @@ Success!
 - [ ] **Step 4:** Click the link to file2.md
 - [ ] **Expected:** file2.md opens in Marka, window title changes to "file2.md — Marka"
 
-**Test 3: History tracks opened files**
+**Test 4: History tracks opened files**
 
-- [ ] **Step 1:** With dev tools open (F12), go to Console tab
-- [ ] **Step 2:** Type: `fileHistory` and press Enter
-- [ ] **Step 3:** Open file1.md and click link to file2.md
-- [ ] **Step 4:** Type `fileHistory` again in console
-- [ ] **Expected:** Output shows `["c:\test\file2.md"]` (or similar path)
+- [ ] **Step 1:** With console still open, type: `fileHistory` and press Enter
+- [ ] **Expected:** Output shows `["c:/test/file2.md"]` (or similar path)
 
-**Test 4: Duplicate files not added twice to history**
+**Test 5: Duplicate files not added twice to history**
 
-- [ ] **Step 1:** Click link to file2.md again
+- [ ] **Step 1:** Click link to file2.md again (in file1.md)
 - [ ] **Step 2:** Check console: `fileHistory`
 - [ ] **Expected:** Still only one entry, no duplicates
 
-**Test 5: Error handling — invalid local path**
+**Test 6: Error handling — invalid local path**
 
-- [ ] **Step 1:** Create Markdown with link to nonexistent file: `[broken](c:\nonexistent\file.md)`
+- [ ] **Step 1:** Create Markdown with link to nonexistent file: `[broken](c:/nonexistent/file.md)`
 - [ ] **Step 2:** Click the link
 - [ ] **Expected:** Error message shown in content area (existing error handling)
 
-- [ ] **Step 6: Commit final state**
+- [ ] **Step 6: No commit needed**
 
-```bash
-git add -A
-git commit -m "test: verify link opening and history functionality"
-```
+All changes already committed in previous tasks.
 
 ---
 
