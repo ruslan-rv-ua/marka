@@ -17,7 +17,7 @@
       }
     ],
     "security": {
-      "csp": null,
+      "csp": "default-src 'self'; script-src 'self'; img-src asset: data: blob:; style-src 'self' 'unsafe-inline';",
       "assetProtocol": {
         "enable": true,
         "scope": ["**"]

@@ -5,11 +5,15 @@ import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js/lib/common";
 import { initI18n, t, getLocale } from "./i18n.js";
+import DOMPurify from "dompurify";
 
 let currentFilePath = null;
 
 function isExternal(href) {
-  return href.startsWith('http://') || href.startsWith('https://');
+  try {
+    const u = new URL(href);
+    return u.protocol === 'http:' || u.protocol === 'https:';
+  } catch { return false; }
 }
 
 function resolvePath(href) {
@@ -192,7 +196,7 @@ async function renderFile(filePath, preloadedContent) {
   currentFilePath = filePath;
   try {
     const markdown = preloadedContent ?? await invoke("read_file", { path: filePath });
-    contentEl.innerHTML = marked.parse(markdown);
+    contentEl.innerHTML = DOMPurify.sanitize(marked.parse(markdown));
     fixMediaSrc();
 
     // Ensure aria-live announcement region exists
@@ -324,8 +328,9 @@ async function checkCliArgs() {
     if (matches.args.file && matches.args.file.value) {
       renderFile(matches.args.file.value);
     }
-  } catch {
-    // No CLI args — that's fine
+  } catch (err) {
+    // Plugin not initialized or no CLI args — expected in non-CLI launch
+    if (import.meta.env.DEV) console.warn("checkCliArgs:", err);
   }
 }
 

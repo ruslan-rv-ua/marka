@@ -72,13 +72,19 @@ fn save_settings(settings: Settings) -> Result<(), String> {
 
 #[tauri::command]
 fn read_file(path: String) -> Result<String, String> {
-    fs::read_to_string(&path).map_err(|e| format!("Не вдалося прочитати файл: {}", e))
+    let p = std::path::Path::new(&path);
+    if p.extension().and_then(|e| e.to_str()) != Some("md") {
+        return Err("Дозволено тільки .md файли".into());
+    }
+    fs::read_to_string(p).map_err(|e| format!("Не вдалося прочитати файл: {}", e))
 }
 
 #[tauri::command]
 fn open_url(url: String) -> Result<(), String> {
-    open::that(&url)
-        .map_err(|e| format!("Не вдалося відкрити посилання: {}", e))
+    if !url.starts_with("http://") && !url.starts_with("https://") {
+        return Err("Дозволені тільки http/https посилання".into());
+    }
+    open::that(&url).map_err(|e| format!("Не вдалося відкрити посилання: {}", e))
 }
 
 #[tauri::command]
