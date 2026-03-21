@@ -93,6 +93,6 @@ Error messages are in Ukrainian.
 ### Key constraints
 
 - **NVDA accessibility**: `pre` elements require `role="region"`, `aria-label="Блок коду"`, `tabindex="0"`; focus blur→animate→focus cycle forces NVDA browse mode refresh
-- **Keyboard shortcuts**: use `event.key` patterns that work regardless of keyboard layout (layouts other than QWERTY send different `event.code`)
+- **Keyboard shortcuts**: use `event.code` (physical key position) — layout-independent for shortcut keys. Do not use `event.key` which returns layout-dependent characters.
 - **Language**: UI strings are Ukrainian throughout (frontend + Rust error messages)
-- **No CSP**: `tauri.conf.json` sets `"csp": null`
+- **CSP**: `tauri.conf.json` sets `script-src 'self'` to block injected scripts. DOMPurify sanitizes Markdown HTML before inserting into DOM.

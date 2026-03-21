@@ -68,7 +68,7 @@ p {
 }
 
 strong {
-  color: #fff;
+  color: var(--heading);
   font-weight: 700;
 }
 

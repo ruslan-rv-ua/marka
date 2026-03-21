@@ -122,24 +122,29 @@ async function scheduleSave() {
         console.error("scheduleSave failed:", err);
       }
     })();
-  }, 1000);
+  }, SAVE_DEBOUNCE_MS);
 }
 
 let pendingClearTimeout = null;
 let renderGeneration = 0;
 
+const ANNOUNCE_TIMEOUT_MS = 3000;
+const SAVE_DEBOUNCE_MS = 1000;
+const FONT_SIZE_MIN = 10, FONT_SIZE_MAX = 72;
+const PADDING_MIN = 0, PADDING_MAX = 25;
+
 const COPY_ICON = `<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/></svg>`;
 
 function changeFontSize(delta) {
   const current = parseFloat(getComputedStyle(root).getPropertyValue("--font-size"));
-  const next = Math.min(72, Math.max(10, current + delta));
+  const next = Math.min(FONT_SIZE_MAX, Math.max(FONT_SIZE_MIN, current + delta));
   root.style.setProperty("--font-size", `${next}px`);
   scheduleSave();
 }
 
 function changePadding(delta) {
   const current = parseFloat(getComputedStyle(root).getPropertyValue("--padding-x"));
-  const next = Math.min(25, Math.max(0, current + delta));
+  const next = Math.min(PADDING_MAX, Math.max(PADDING_MIN, current + delta));
   root.style.setProperty("--padding-x", `${next}%`);
   scheduleSave();
 }
@@ -157,18 +162,11 @@ function getLiveRegion() {
   return el;
 }
 
-function announceCopy(text) {
+function announce(text) {
   const el = getLiveRegion();
   el.textContent = text;
   clearTimeout(pendingClearTimeout);
-  pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
-}
-
-function announceTheme(theme) {
-  const el = getLiveRegion();
-  el.textContent = t(theme === "light" ? "theme.light" : "theme.dark");
-  clearTimeout(pendingClearTimeout);
-  pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, 3000);
+  pendingClearTimeout = setTimeout(() => { el.textContent = ""; }, ANNOUNCE_TIMEOUT_MS);
 }
 
 function toggleTheme() {
@@ -178,7 +176,7 @@ function toggleTheme() {
   } else {
     root.removeAttribute("data-theme");
   }
-  announceTheme(next);
+  announce(t(next === "light" ? "theme.light" : "theme.dark"));
   scheduleSave();
 }
 
@@ -192,12 +190,19 @@ async function renderFile(filePath, preloadedContent) {
     // Ensure aria-live announcement region exists
     getLiveRegion();
 
-    // Add copy buttons after each non-empty code block
+    // Add copy buttons and ARIA attributes to each non-empty code block
     const myGeneration = ++renderGeneration;
     let codeBlockIndex = 0;
     contentEl.querySelectorAll("pre").forEach((pre) => {
       if (pre.textContent.trim() === "") return;
       codeBlockIndex++;
+
+      // ARIA accessibility for NVDA
+      pre.setAttribute("role", "region");
+      pre.setAttribute("aria-label", t("code.label", { index: codeBlockIndex }));
+      pre.setAttribute("tabindex", "0");
+
+      // Copy button
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "copy-btn";
@@ -207,9 +212,9 @@ async function renderFile(filePath, preloadedContent) {
         const codeEl = pre.querySelector("code") ?? pre;
         try {
           await navigator.clipboard.writeText(codeEl.textContent);
-          if (renderGeneration === myGeneration) announceCopy(t("copy.success"));
+          if (renderGeneration === myGeneration) announce(t("copy.success"));
         } catch {
-          if (renderGeneration === myGeneration) announceCopy(t("copy.error"));
+          if (renderGeneration === myGeneration) announce(t("copy.error"));
         }
       });
       const wrapper = document.createElement("div");
@@ -217,16 +222,6 @@ async function renderFile(filePath, preloadedContent) {
       pre.parentNode.insertBefore(wrapper, pre);
       wrapper.appendChild(pre);
       wrapper.appendChild(btn);
-    });
-
-    // Make code blocks accessible for NVDA
-    codeBlockIndex = 0;  // Reset counter for second pass
-    contentEl.querySelectorAll("pre").forEach((pre) => {
-      if (pre.textContent.trim() === "") return;  // Match copy loop filter
-      codeBlockIndex++;
-      pre.setAttribute("role", "region");
-      pre.setAttribute("aria-label", t("code.label", { index: codeBlockIndex }));
-      pre.setAttribute("tabindex", "0");
     });
 
     // Force NVDA browse mode by blurring and re-focusing the document container

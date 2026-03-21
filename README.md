@@ -150,6 +150,22 @@ cargo tauri build --release
 
 The resulting executables are located in `src-tauri/target/release/`.
 
+## Development & Testing
+
+### Manual QA fixtures
+
+The `test-markdown/` directory contains Markdown files for manual rendering verification:
+
+| File | Purpose |
+|------|---------|
+| `test-all-languages.md` | Syntax highlighting for all supported languages |
+| `test-complete.md` | All Markdown elements (headings, tables, lists, blockquotes) |
+| `test-images.md` | Embedded images (local and external) |
+| `test-links.md` | Internal and external link navigation |
+| `test-mixed.md` | Mixed content stress test |
+
+Open any of these files in Marka to verify rendering after code changes.
+
 ## Credits
 
 Built with:
