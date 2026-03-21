@@ -104,15 +104,18 @@ renderFile(absPath);
 
 This ensures that when navigating between markdown files via relative links, each subsequent file is opened with the correct absolute path, and `currentFilePath` is updated accordingly — enabling correct media resolution in the newly opened file.
 
-### 6. Tauri asset protocol permission
+### 6. Tauri asset protocol configuration
 
-Add to `src-tauri/capabilities/default.json`:
+Add to `src-tauri/tauri.conf.json` under `app.security`:
 
 ```json
-"core:asset:allow-get-asset-request"
+"assetProtocol": {
+  "enable": true,
+  "scope": ["**"]
+}
 ```
 
-This grants the WebView permission to load local files via the `http://asset.localhost/` protocol. No scope restriction is needed — Marka is a file viewer designed to open arbitrary files.
+This enables the `http://asset.localhost/` protocol and grants access to all paths. Without `scope: ["**"]`, the default scope is an empty list — every asset request returns HTTP 403. No capabilities change is needed; asset protocol is configured via `tauri.conf.json`, not the ACL system.
 
 ## Data Flow (after fix)
 
@@ -124,7 +127,7 @@ marka.exe c:\docs\report.md
   → fixMediaSrc()
       resolvePath("chart.png") → "c:\docs\chart.png"
       convertFileSrc(...)      → "http://asset.localhost/c%3A/docs/chart.png"
-      img.src = "http://asset.localhost/c%3A/docs/chart.png" ✓
+      img.src = "http://asset.localhost/C%3A%5Cdocs%5Cchart.png" ✓
 
   → user clicks [see appendix.md]
   → resolvePath("appendix.md") → "c:\docs\appendix.md"
@@ -137,10 +140,11 @@ marka.exe c:\docs\report.md
 | File | Change |
 |------|--------|
 | `src/main.js` | Add `currentFilePath`, `resolvePath()`, `isExternal()`, `fixMediaSrc()`; update `renderFile` and click handler |
-| `src-tauri/capabilities/default.json` | Add `core:asset:allow-get-asset-request` |
+| `src-tauri/tauri.conf.json` | Add `assetProtocol: { enable: true, scope: ["**"] }` under `app.security` |
 
 ## Out of Scope
 
 - History/back navigation (not affected by this change)
-- Absolute local paths in markdown (e.g., `![](C:\img.png)`) — already resolved correctly by `resolvePath` since `isExternal` returns false and the URL constructor handles them
+- Absolute local Windows paths in markdown (e.g., `![](C:\img.png)`) — uncommon in standard markdown; the JS `URL` constructor does not reliably parse Windows absolute paths, but marked.js never emits them in `src` attributes
 - `srcset` attribute — not used in standard markdown output
+- `fileHistory` in the click handler will contain resolved absolute paths after this fix (previously it stored raw hrefs); this is acceptable since history/back navigation is not yet implemented
