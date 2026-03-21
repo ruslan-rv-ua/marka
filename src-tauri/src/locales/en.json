@@ -4,7 +4,7 @@
   "copy.button": "Copy code {index}",
   "copy.success": "Code copied",
   "copy.error": "Copy error",
-  "code.label": "Code block",
+  "code.label": "Code {index} — region",
   "initial.message": "Press Ctrl+O to open a file.",
   "document.label": "Document content",
   "error.prefix": "Error: "
