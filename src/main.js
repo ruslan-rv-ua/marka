@@ -37,7 +37,10 @@ function fixMediaSrc() {
 }
 
 // Configure marked with highlight.js via marked-highlight extension
+// html: true — allows raw HTML tags in Markdown (video, audio, etc.)
+// DOMPurify sanitizes the output, so this is safe
 const marked = new Marked(
+  { html: true },
   markedHighlight({
     langPrefix: "hljs language-",
     highlight(code, lang) {

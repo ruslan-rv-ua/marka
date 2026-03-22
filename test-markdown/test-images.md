@@ -44,9 +44,11 @@ Here you can see a combination of images and links:
 
 ## Video and Audio (fixMediaSrc test)
 
-Ці медіафайли не існують на диску. Мета — перевірити що `fixMediaSrc()` перетворює відносні шляхи `src` на `tauri://` URI через `convertFileSrc()`.
+Медіафайли: `sample.mp4`, `sample.mp3`, `sample.webm` — завантажені з [MDN shared-assets](https://github.com/mdn/shared-assets), ліцензія CC0 1.0 (Public Domain).
 
-**Як перевірити:** відкрийте DevTools (F12) після відкриття цього файлу. Знайдіть елементи `<video>` і `<audio>` у DOM → вкладка Elements. Атрибут `src` має бути `tauri://localhost/...` — а не оригінальний `./sample.*` шлях.
+Мета — перевірити що `fixMediaSrc()` перетворює відносні шляхи `src` на `tauri://` URI через `convertFileSrc()`.
+
+**Як перевірити:** відкрийте DevTools (F12) після відкриття цього файлу. Знайдіть елементи `<video>` і `<audio>` у DOM → вкладка Elements. Атрибут `src` має бути `http://asset.localhost/...` — а не оригінальний `./sample.*` шлях.
 
 ### Video (атрибут src)
 
