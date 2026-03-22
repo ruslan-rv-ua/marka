@@ -74,7 +74,6 @@ async function initializeLocale() {
   document.documentElement.lang = getLocale();
 
   // Set dynamic content
-  document.getElementById("initial-message").textContent = t("initial.message");
   document.querySelector('main[role="document"]').setAttribute("aria-label", t("document.label"));
 }
 

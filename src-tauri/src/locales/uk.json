@@ -5,7 +5,6 @@
   "copy.success": "Код скопійовано",
   "copy.error": "Помилка копіювання",
   "code.label": "Код {index} — ",
-  "initial.message": "Натисніть Ctrl+O щоб відкрити файл.",
   "document.label": "Вміст документа",
   "error.prefix": "Помилка: "
 }

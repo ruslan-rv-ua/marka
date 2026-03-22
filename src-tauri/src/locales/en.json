@@ -5,7 +5,6 @@
   "copy.success": "Code copied",
   "copy.error": "Copy error",
   "code.label": "Code {index} — ",
-  "initial.message": "Press Ctrl+O to open a file.",
   "document.label": "Document content",
   "error.prefix": "Error: "
 }
