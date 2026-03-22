@@ -294,3 +294,134 @@ build_app "$VERSION"
 ```
 
 Цей bash-скрипт демонструє `set -euo pipefail`, параметр зі значенням за замовчуванням (`${1:-0.1.0}`), функцію з `local` змінною, перевірку регулярного виразу (`=~`) та виведення помилки в stderr (`>&2`).
+
+---
+
+## 15. CSS
+
+CSS (Cascading Style Sheets) — мова стилів для оформлення HTML-документів. Визначає розміщення, кольори, шрифти та анімацію. Разом з HTML та JavaScript є однією з трьох основних технологій веб.
+
+```css
+:root {
+  --font-size: 16px;
+  --padding-x: 10%;
+  --bg-color: #1a1a1a;
+  --text-color: #e8e8e8;
+  --accent: #4fc3f7;
+}
+
+.code-block {
+  position: relative;
+  background-color: var(--bg-color);
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.code-block:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --padding-x: 2%;
+  }
+}
+```
+
+Цей CSS демонструє CSS-змінні (`--`), псевдоклас `:focus-within` для доступності, функцію `var()` та медіазапит `@media` для адаптивності.
+
+---
+
+## 16. C#
+
+C# — об'єктно-орієнтована мова від Microsoft для платформи .NET. Широко використовується для Windows-додатків (WinUI, WPF), серверних застосунків (ASP.NET), ігор (Unity) і мобільних (MAUI).
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class MarkdownFile
+{
+    public string Path { get; init; }
+    public string Content { get; private set; }
+
+    public MarkdownFile(string path, string content)
+    {
+        Path = path ?? throw new ArgumentNullException(nameof(path));
+        Content = content;
+    }
+
+    public IEnumerable<string> GetHeadings() =>
+        Content.Split('\n')
+               .Where(line => line.StartsWith('#'))
+               .Select(line => line.TrimStart('#', ' '));
+}
+
+var file = new MarkdownFile("readme.md", "# Hello\n## World");
+foreach (var heading in file.GetHeadings())
+    Console.WriteLine(heading);
+```
+
+Цей C#-код демонструє `init`-сетер (C# 9+), `ArgumentNullException`, LINQ-методи (`Where`, `Select`) та вираз-тіло методу (`=>`).
+
+---
+
+## 17. Kotlin
+
+Kotlin — статично типізована мова JVM від JetBrains, офіційна мова Android-розробки. Поєднує ООП і функціональний стиль. Відома null-безпекою і лаконічністю.
+
+```kotlin
+data class MarkdownFile(
+    val path: String,
+    val content: String
+)
+
+fun MarkdownFile.headings(): List<String> =
+    content.lines()
+        .filter { it.startsWith("#") }
+        .map { it.trimStart('#', ' ') }
+
+fun main() {
+    val file = MarkdownFile(
+        path = "readme.md",
+        content = "# Hello\n## World\n### Section"
+    )
+    file.headings().forEach { heading ->
+        println(heading)
+    }
+}
+```
+
+Цей Kotlin-код демонструє `data class`, функцію-розширення (`fun MarkdownFile.headings()`), функціональні методи (`filter`, `map`, `forEach`) та named arguments.
+
+---
+
+## 18. Dockerfile
+
+Dockerfile — набір інструкцій для збирання Docker-образу. Docker — платформа контейнеризації для пакування застосунків з залежностями. Широко використовується у DevOps та хмарних розгортаннях.
+
+```dockerfile
+FROM rust:1.76-slim AS builder
+
+WORKDIR /app
+COPY Cargo.toml Cargo.lock ./
+COPY src/ ./src/
+RUN cargo build --release
+
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY --from=builder /app/target/release/marka ./
+
+EXPOSE 8080
+USER 1000:1000
+ENTRYPOINT ["./marka"]
+```
+
+Цей Dockerfile демонструє multi-stage build (Rust `builder` → мінімальний `debian`), копіювання артефакту між стадіями (`COPY --from=builder`) та запуск від непривілейованого користувача (`USER 1000:1000`).
