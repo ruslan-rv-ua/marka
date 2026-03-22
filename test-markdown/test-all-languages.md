@@ -187,4 +187,110 @@ print(message)
 
 This Swift code demonstrates the modern syntax of the Apple language. The `greet` function uses an underscore `_` before the parameter `name`, which allows calling the function without the argument name. Typing in Swift is explicit — the parameter has type `String`, and the function returns `String`. Swift uses string interpolation `\(name)` and the `let` keyword to declare the immutable constant `message`. The `print()` function outputs the result to the console.
 
+---
+
+## 11. SQL
+
+SQL (Structured Query Language) — декларативна мова для роботи з реляційними базами даних. Використовується для запитів, вставки, оновлення та видалення даних. Підтримується PostgreSQL, MySQL, SQLite, MS SQL Server.
+
+```sql
+SELECT u.id, u.name, COUNT(o.id) AS order_count
+FROM users u
+LEFT JOIN orders o ON o.user_id = u.id
+WHERE u.created_at >= '2024-01-01'
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) > 0
+ORDER BY order_count DESC
+LIMIT 10;
 ```
+
+Цей SQL-запит демонструє `LEFT JOIN` двох таблиць, фільтрацію по даті (`WHERE`), групування (`GROUP BY`), агрегатну функцію `COUNT`, фільтр по групах (`HAVING`) і сортування з обмеженням (`ORDER BY ... LIMIT`).
+
+---
+
+## 12. JSON
+
+JSON (JavaScript Object Notation) — текстовий формат обміну даними. Широко використовується у веб-API, конфігураційних файлах і серіалізації. Підтримує рядки, числа, масиви, об'єкти, булеві значення та null.
+
+```json
+{
+  "name": "marka",
+  "version": "0.1.0",
+  "description": "Markdown viewer for Windows",
+  "features": ["nvda-accessibility", "syntax-highlighting", "dark-mode"],
+  "settings": {
+    "fontSize": 16,
+    "paddingX": 10,
+    "theme": "dark",
+    "windowMaximized": false
+  },
+  "dependencies": null
+}
+```
+
+Цей JSON-документ ілюструє основні типи даних: рядки, числа (`16`, `10`), масив рядків (`"features"`), вкладений об'єкт (`"settings"`) та значення `null`.
+
+---
+
+## 13. YAML
+
+YAML (YAML Ain't Markup Language) — формат серіалізації даних, орієнтований на читабельність. Широко використовується у конфігураціях (Docker Compose, GitHub Actions, Ansible, Kubernetes).
+
+```yaml
+name: Marka Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: marka-windows
+          path: target/release/marka.exe
+```
+
+Цей YAML-файл — приклад GitHub Actions workflow. Показує ключи, списки через дефіс `-`, вкладені об'єкти та багаторівневу ієрархію відступами.
+
+---
+
+## 14. Bash
+
+Bash (Bourne Again Shell) — командна мова та інтерпретатор Unix/Linux. Використовується для автоматизації, системного адміністрування та скриптів CI/CD.
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+VERSION="${1:-0.1.0}"
+OUTPUT_DIR="dist"
+
+build_app() {
+  local ver="$1"
+  echo "Building version $ver..."
+  cargo build --release
+  mkdir -p "$OUTPUT_DIR"
+  cp target/release/marka.exe "$OUTPUT_DIR/marka-$ver.exe"
+  echo "Done: $OUTPUT_DIR/marka-$ver.exe"
+}
+
+if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "Error: invalid version format '$VERSION'" >&2
+  exit 1
+fi
+
+build_app "$VERSION"
+```
+
+Цей bash-скрипт демонструє `set -euo pipefail`, параметр зі значенням за замовчуванням (`${1:-0.1.0}`), функцію з `local` змінною, перевірку регулярного виразу (`=~`) та виведення помилки в stderr (`>&2`).
