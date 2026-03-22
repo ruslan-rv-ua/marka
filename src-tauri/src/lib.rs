@@ -5,6 +5,8 @@ use open;
 
 const LOCALE_UK: &str = include_str!("locales/uk.json");
 const LOCALE_EN: &str = include_str!("locales/en.json");
+const HELP_UK: &str = include_str!("locales/help.uk.md");
+const HELP_EN: &str = include_str!("locales/help.en.md");
 
 #[derive(serde::Serialize)]
 pub struct OpenedFile {
@@ -132,6 +134,16 @@ fn get_translations(locale: String) -> Result<serde_json::Value, String> {
     serde_json::from_str(json_str).map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn get_help(locale: String, app: tauri::AppHandle) -> Result<String, String> {
+    let template = match locale.as_str() {
+        "uk" => HELP_UK,
+        _ => HELP_EN,
+    };
+    let version = app.package_info().version.to_string();
+    Ok(template.replace("{version}", &version))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -159,6 +171,7 @@ pub fn run() {
         .plugin(tauri_plugin_cli::init())
         .invoke_handler(tauri::generate_handler![
             detect_system_locale,
+            get_help,
             get_translations,
             load_settings,
             open_file_dialog,
