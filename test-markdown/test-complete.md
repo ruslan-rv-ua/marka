@@ -308,6 +308,24 @@ function fibonacci(n) {
 
 This test file demonstrates all basic markdown elements that can be used to test markdown content rendering.
 
+## 15. Anchor Links
+
+### Anchor Target {#anchor-target-id}
+
+Цей заголовок є цільовим якорем. Посилання нижче має прокрутити сторінку до нього.
+
+[Перейти до якірного заголовка](#anchor-target-id)
+
+[Перейти до секції "Блоки коду"](#7-code-blocks)
+
+---
+
+## 16. Long Lines
+
+Рядок з 500+ символів без пробілів (перевірка горизонтального скролу або кліпінгу):
+
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
 ---
 
 **End of test file** 🎉
