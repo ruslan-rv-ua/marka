@@ -42,5 +42,30 @@ Here you can see a combination of images and links:
 |---------|---------|---------|
 | ![Test Image 1](test-image1.png) | ![Test Image 2](test-image2.png) | ![Test Image 3](test-image3.png) |
 
+## Video and Audio (fixMediaSrc test)
+
+Ці медіафайли не існують на диску. Мета — перевірити що `fixMediaSrc()` перетворює відносні шляхи `src` на `tauri://` URI через `convertFileSrc()`.
+
+**Як перевірити:** відкрийте DevTools (F12) після відкриття цього файлу. Знайдіть елементи `<video>` і `<audio>` у DOM → вкладка Elements. Атрибут `src` має бути `tauri://localhost/...` — а не оригінальний `./sample.*` шлях.
+
+### Video (атрибут src)
+
+<video src="./sample.mp4" controls width="400">
+  Відео не підтримується вашим браузером.
+</video>
+
+### Audio (атрибут src)
+
+<audio src="./sample.mp3" controls>
+  Аудіо не підтримується вашим браузером.
+</audio>
+
+### Video з вкладеним елементом source
+
+<video controls width="400">
+  <source src="./sample.webm" type="video/webm">
+  Відео не підтримується вашим браузером.
+</video>
+
 ## End of Test
 This is the end of the image test file.
