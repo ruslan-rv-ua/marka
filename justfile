@@ -17,7 +17,7 @@ build:
 # Fast build — larger exe, quick compile
 [doc('Release build (fast compile, larger exe)')]
 build-fast:
-    pnpm tauri build --profile release-fast --no-bundle
+    pnpm tauri build --no-bundle -- --profile release-fast
 
 # Frontend-only dev server on port 1420
 [doc('Frontend dev server only')]
