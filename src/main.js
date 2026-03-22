@@ -239,6 +239,33 @@ async function renderFile(filePath, preloadedContent) {
   }
 }
 
+async function showHelp() {
+  try {
+    const markdown = await invoke("get_help", { locale: getLocale() });
+    contentEl.innerHTML = DOMPurify.sanitize(marked.parse(markdown));
+
+    // ARIA attributes for NVDA on code blocks (no copy buttons for help screen)
+    let codeBlockIndex = 0;
+    contentEl.querySelectorAll("pre").forEach((pre) => {
+      if (pre.textContent.trim() === "") return;
+      codeBlockIndex++;
+      pre.setAttribute("role", "region");
+      pre.setAttribute("aria-label", t("code.label", { index: codeBlockIndex }));
+      pre.setAttribute("tabindex", "0");
+    });
+
+    // Force NVDA browse mode refresh
+    contentEl.blur();
+    requestAnimationFrame(() => contentEl.focus());
+  } catch (err) {
+    const errorEl = document.createElement("p");
+    errorEl.setAttribute("role", "alert");
+    errorEl.textContent = `${t("error.prefix")}${err}`;
+    contentEl.replaceChildren(errorEl);
+    contentEl.focus();
+  }
+}
+
 // Handle clicks on links in Markdown content
 contentEl.addEventListener("click", (e) => {
   const link = e.target.closest("a");
@@ -303,12 +330,14 @@ async function checkCliArgs() {
   try {
     const matches = await getMatches();
     if (matches.args.file && matches.args.file.value) {
-      renderFile(matches.args.file.value);
+      await renderFile(matches.args.file.value);
+      return true;
     }
   } catch (err) {
     // Plugin not initialized or no CLI args — expected in non-CLI launch
     if (import.meta.env.DEV) console.warn("checkCliArgs:", err);
   }
+  return false;
 }
 
 try {
@@ -317,4 +346,5 @@ try {
 } catch (err) {
   console.error("Initialization failed:", err);
 }
-checkCliArgs();  // intentionally not awaited — CLI open is independent of settings
+const fileOpened = await checkCliArgs();
+if (!fileOpened) await showHelp();
