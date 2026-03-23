@@ -42,21 +42,25 @@ Wrapper around `renderFile()`. All file-opening code paths call this instead of 
 
 ### `goBack()`
 
-1. If `historyIndex <= 0` → `announce(t("history.empty"))`, return
-2. `historyIndex--`
-3. Set `navigatingHistory = true`
-4. Call `renderFile(history[historyIndex])`
-5. Announce: `announce(t("history.back", { file: fileName }))`
-6. Set `navigatingHistory = false` (in `.finally()`)
+1. If `navigatingHistory` is `true` — return (guard against rapid keypresses)
+2. If `historyIndex <= 0` → `announce(t("history.empty"))`, return
+3. `historyIndex--`
+4. Set `navigatingHistory = true`
+5. `await renderFile(history[historyIndex])`
+6. Announce: `announce(t("history.back", { file: fileName }))`
+7. Set `navigatingHistory = false` in a `finally` block attached to the `renderFile()` call
+
+**Note:** Back/forward always re-read the file from disk (no cached content). This ensures content is fresh if the file was edited externally. The `content` parameter from the original `navigateTo()` call is not stored.
 
 ### `goForward()`
 
-1. If `historyIndex >= history.length - 1` → `announce(t("history.empty"))`, return
-2. `historyIndex++`
-3. Set `navigatingHistory = true`
-4. Call `renderFile(history[historyIndex])`
-5. Announce: `announce(t("history.forward", { file: fileName }))`
-6. Set `navigatingHistory = false` (in `.finally()`)
+1. If `navigatingHistory` is `true` — return (guard against rapid keypresses)
+2. If `historyIndex >= history.length - 1` → `announce(t("history.empty"))`, return
+3. `historyIndex++`
+4. Set `navigatingHistory = true`
+5. `await renderFile(history[historyIndex])`
+6. Announce: `announce(t("history.forward", { file: fileName }))`
+7. Set `navigatingHistory = false` in a `finally` block attached to the `renderFile()` call
 
 ### Helper
 
@@ -135,8 +139,10 @@ After `renderFile()` completes, NVDA also gets the focus-blur-refocus cycle (exi
 | App starts with CLI file | `navigateTo()` pushes it as the first entry. Alt+← announces "empty". |
 | Open same file twice in a row | Both entries are pushed (no deduplication). This matches browser behavior. |
 | Go back 2 steps, then open new file | Forward entries are pruned. New file becomes the head. |
-| File was deleted since last visit | `renderFile()` will show its existing error: "Не вдалося прочитати файл". User can Alt+← to go back. |
-| Go back from help screen | Help is not in history. If user is on help and presses Alt+←, it announces "empty". |
+| File was deleted since last visit | `renderFile()` will show its existing error: "Не вдалося прочитати файл". The broken entry stays in the stack (not removed). User can Alt+← to go back further. |
+| Go back from help screen | Help is not in history. `historyIndex` still points at the last opened file. Alt+← navigates to `historyIndex - 1` (previous file), or announces "empty" if no previous file exists. |
+| Rapid repeated Alt+←/→ | Guarded by `navigatingHistory` flag — second keypress is ignored while first navigation is in flight. |
+| User on help, presses Alt+← | If files were opened before help, `historyIndex` points at the last file. `goBack()` goes to the file before it. If only one file was opened, announces "empty". To return to the current file from help, user reopens it (Ctrl+O or link). Help→file "return" is out of scope. |
 
 ## Files to Modify
 
