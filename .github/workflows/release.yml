@@ -22,6 +22,7 @@ env:
   # APP_ID (для event-type у scoop-bucket) буде автоматично приведено до lowercase.
   APP_NAME: marka
   # ──────────────────────────────────────────────────────────────────────────
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: write
@@ -96,6 +97,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ steps.info.outputs.VERSION }}
           files: |
             ${{ env.APP_NAME }}-*.zip
             ${{ env.APP_NAME }}-*.zip.sha256
