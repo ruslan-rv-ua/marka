@@ -212,6 +212,12 @@ function changePadding(delta) {
   scheduleSave();
 }
 
+function resetZoom() {
+  root.style.setProperty("--font-size", `${DEFAULT_FONT_SIZE}px`);
+  root.style.setProperty("--padding-x", `${DEFAULT_PADDING_X}%`);
+  scheduleSave();
+}
+
 function getLiveRegion() {
   let el = document.getElementById("copy-announcement");
   if (!el) {
