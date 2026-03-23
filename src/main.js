@@ -9,6 +9,55 @@ import DOMPurify from "dompurify";
 
 let currentFilePath = null;
 
+const navHistory = [];
+let historyIndex = -1;
+let navigatingHistory = false;
+
+function fileNameFromPath(filePath) {
+  return filePath.split(/[\\/]/).pop();
+}
+
+function navigateTo(filePath, content) {
+  if (!navigatingHistory) {
+    navHistory.splice(historyIndex + 1);
+    navHistory.push(filePath);
+    historyIndex = navHistory.length - 1;
+  }
+  return renderFile(filePath, content);
+}
+
+async function goBack() {
+  if (navigatingHistory) return;
+  if (historyIndex <= 0) {
+    announce(t("history.empty"));
+    return;
+  }
+  historyIndex--;
+  navigatingHistory = true;
+  try {
+    await renderFile(navHistory[historyIndex]);
+    announce(t("history.back", { file: fileNameFromPath(navHistory[historyIndex]) }));
+  } finally {
+    navigatingHistory = false;
+  }
+}
+
+async function goForward() {
+  if (navigatingHistory) return;
+  if (historyIndex >= navHistory.length - 1) {
+    announce(t("history.empty"));
+    return;
+  }
+  historyIndex++;
+  navigatingHistory = true;
+  try {
+    await renderFile(navHistory[historyIndex]);
+    announce(t("history.forward", { file: fileNameFromPath(navHistory[historyIndex]) }));
+  } finally {
+    navigatingHistory = false;
+  }
+}
+
 function isExternal(href) {
   try {
     const u = new URL(href);
