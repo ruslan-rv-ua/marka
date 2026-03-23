@@ -94,6 +94,12 @@ jobs:
           echo "HASH=$hash" >> $env:GITHUB_OUTPUT
           echo "ZIP_NAME=$zipName" >> $env:GITHUB_OUTPUT
 
+      - name: Create tag (workflow_dispatch only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git tag v${{ steps.info.outputs.VERSION }}
+          git push origin v${{ steps.info.outputs.VERSION }}
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
