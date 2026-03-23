@@ -34,9 +34,15 @@
 "file.opened": "Opened: {file}"
 ```
 
-### 2. `navigateTo()` в `src/main.js`
+### 2. `renderFile()` в `src/main.js`
 
-Додати `announce()` після `await renderFile()`:
+Змінити `renderFile()` щоб повертала `boolean` — `true` при успіху, `false` при помилці. Це дозволить `navigateTo()` оголошувати тільки при успішному завантаженні.
+
+В `catch`-блоці додати `return false`, в кінці `try`-блоку — `return true`.
+
+### 3. `navigateTo()` в `src/main.js`
+
+Додати `announce()` після успішного `renderFile()`, зберігши `return`:
 
 ```js
 async function navigateTo(filePath, content) {
@@ -45,10 +51,13 @@ async function navigateTo(filePath, content) {
     navHistory.push(filePath);
     historyIndex = navHistory.length - 1;
   }
-  await renderFile(filePath, content);
-  announce(t("file.opened", { file: fileNameFromPath(filePath) }));
+  const ok = await renderFile(filePath, content);
+  if (ok) announce(t("file.opened", { file: fileNameFromPath(filePath) }));
+  return ok;
 }
 ```
+
+Оголошення "Відкрито: файл" НЕ спрацює якщо `renderFile` показав помилку — користувач почує тільки `role="alert"` повідомлення про помилку.
 
 ## Матриця оголошень
 
@@ -63,11 +72,11 @@ async function navigateTo(filePath, content) {
 
 ## Що НЕ змінюється
 
-- `renderFile()` — без змін
+- `renderFile()` — мінімальна зміна: додано `return true`/`return false`
 - `goBack()` / `goForward()` — без змін
 - `showHelp()` — без оголошення
 - `aria-live` region — перевикористовується існуючий
 
 ## Обсяг
 
-~3 рядки JS + 2 рядки JSON.
+~5 рядків JS + 2 рядки JSON.
