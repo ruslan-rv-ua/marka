@@ -100,10 +100,11 @@ function fixMediaSrc() {
 // Configure marked with highlight.js via marked-highlight extension
 // html: true — allows raw HTML tags in Markdown (video, audio, etc.)
 // DOMPurify sanitizes the output, so this is safe
+const HLJS_LANG_PREFIX = "hljs language-";
 const marked = new Marked(
   { html: true },
   markedHighlight({
-    langPrefix: "hljs language-",
+    langPrefix: HLJS_LANG_PREFIX,
     highlight(code, lang) {
       if (lang && hljs.getLanguage(lang)) {
         return hljs.highlight(code, { language: lang }).value;
@@ -114,9 +115,11 @@ const marked = new Marked(
   {
     renderer: {
       code({ text, lang }) {
-        const safeLang = lang ? lang.replace(/[^a-zA-Z0-9._+-]/g, "") : "";
+        // `text` is already highlighted, pre-escaped HTML — markedHighlight
+        // runs as a walkTokens extension and mutates token.text before rendering.
+        const safeLang = lang ? lang.split(/\s+/)[0].replace(/[^a-zA-Z0-9._+-]/g, "") : "";
         const langAttr = safeLang ? ` data-lang="${safeLang}"` : "";
-        const langClass = safeLang ? `hljs language-${safeLang}` : "hljs";
+        const langClass = safeLang ? `${HLJS_LANG_PREFIX}${safeLang}` : "hljs";
         return `<pre${langAttr}><code class="${langClass}">${text}</code></pre>\n`;
       }
     }
