@@ -6,5 +6,8 @@
   "copy.error": "Copy error",
   "code.label": "Code {index} — ",
   "document.label": "Document content",
-  "error.prefix": "Error: "
+  "error.prefix": "Error: ",
+  "history.back": "Back: {file}",
+  "history.forward": "Forward: {file}",
+  "history.empty": "No navigation history"
 }
