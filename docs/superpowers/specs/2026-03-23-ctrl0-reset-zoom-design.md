@@ -54,7 +54,7 @@ if (e.ctrlKey && e.code === "Digit0") {
 
 Key notes:
 - Uses `event.code` (physical key position), consistent with all other shortcuts in the file.
-- `Numpad0` is intentionally excluded. Rationale: `Ctrl+[`/`Ctrl+]` (padding) have no numpad variants, keeping reset consistent with padding shortcuts. Additionally, `Ctrl+Numpad0` is reserved by browsers/WebView2 as reset-zoom, so handling it would shadow host behaviour.
+- `Numpad0` is intentionally excluded. Rationale: `Ctrl+[`/`Ctrl+]` (padding) have no numpad variants, and keeping reset consistent with padding shortcuts is sufficient justification.
 - `scheduleSave()` persists the reset values to disk with the existing 1-second debounce.
 
 ## Behaviour
