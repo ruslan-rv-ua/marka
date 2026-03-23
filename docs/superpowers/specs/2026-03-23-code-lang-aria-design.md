@@ -25,8 +25,9 @@ const marked = new Marked(
   {
     renderer: {
       code({ text, lang }) {
-        const langAttr = lang ? ` data-lang="${lang}"` : "";
-        const langClass = lang ? `hljs language-${lang}` : "hljs";
+        const safeLang = lang ? lang.replace(/[^a-zA-Z0-9._+-]/g, "") : "";
+        const langAttr = safeLang ? ` data-lang="${safeLang}"` : "";
+        const langClass = safeLang ? `hljs language-${safeLang}` : "hljs";
         return `<pre${langAttr}><code class="${langClass}">${text}</code></pre>\n`;
       }
     }
@@ -82,7 +83,12 @@ The existing `"code.label"` key remains unchanged for blocks without a language.
 | ` ```py ` | Код 1: py | Code 1: py |
 | ` ``` ` (no lang) | Код 1 — | Code 1 — |
 
+## Security
+
+- **`lang` sanitization**: The `lang` value from the Markdown fence is user-controlled input. The custom renderer sanitizes it with `lang.replace(/[^a-zA-Z0-9._+-]/g, "")` before interpolating into HTML attributes. This is defense-in-depth — DOMPurify also strips dangerous attributes, but the renderer should not create injection points.
+
 ## Risks
 
 - **DOMPurify and `data-lang`**: `data-*` attributes are allowed by DOMPurify's default config. Verified: DOMPurify does not strip `data-*` attributes.
 - **`markedHighlight` interaction**: The custom renderer receives `text` already processed by `markedHighlight`, so highlight.js output is preserved. The renderer only wraps it in `<pre><code>`.
+- **Double wrapping**: The custom `code` renderer replaces the default one. `markedHighlight` processes `text` first, then the renderer wraps it. Manual testing needed to confirm no double `<pre>` or `<code>` elements.
