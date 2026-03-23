@@ -78,6 +78,9 @@ function resolvePath(href) {
 function scrollToAnchor(anchorId) {
   const target = document.getElementById(anchorId);
   if (target) {
+    if (!target.hasAttribute("tabindex")) {
+      target.setAttribute("tabindex", "-1");
+    }
     target.focus();
   }
 }
