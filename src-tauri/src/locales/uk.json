@@ -6,5 +6,8 @@
   "copy.error": "Помилка копіювання",
   "code.label": "Код {index} — ",
   "document.label": "Вміст документа",
-  "error.prefix": "Помилка: "
+  "error.prefix": "Помилка: ",
+  "history.back": "Назад: {file}",
+  "history.forward": "Вперед: {file}",
+  "history.empty": "Немає куди переходити"
 }

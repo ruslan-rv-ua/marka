@@ -9,6 +9,55 @@ import DOMPurify from "dompurify";
 
 let currentFilePath = null;
 
+const navHistory = [];
+let historyIndex = -1;
+let navigatingHistory = false;
+
+function fileNameFromPath(filePath) {
+  return filePath.split(/[\\/]/).pop();
+}
+
+async function navigateTo(filePath, content) {
+  if (!navigatingHistory) {
+    navHistory.splice(historyIndex + 1);
+    navHistory.push(filePath);
+    historyIndex = navHistory.length - 1;
+  }
+  return await renderFile(filePath, content);
+}
+
+async function goBack() {
+  if (navigatingHistory) return;
+  if (historyIndex <= 0) {
+    announce(t("history.empty"));
+    return;
+  }
+  historyIndex--;
+  navigatingHistory = true;
+  try {
+    await renderFile(navHistory[historyIndex]);
+    announce(t("history.back", { file: fileNameFromPath(navHistory[historyIndex]) }));
+  } finally {
+    navigatingHistory = false;
+  }
+}
+
+async function goForward() {
+  if (navigatingHistory) return;
+  if (historyIndex >= navHistory.length - 1) {
+    announce(t("history.empty"));
+    return;
+  }
+  historyIndex++;
+  navigatingHistory = true;
+  try {
+    await renderFile(navHistory[historyIndex]);
+    announce(t("history.forward", { file: fileNameFromPath(navHistory[historyIndex]) }));
+  } finally {
+    navigatingHistory = false;
+  }
+}
+
 function isExternal(href) {
   try {
     const u = new URL(href);
@@ -287,7 +336,7 @@ contentEl.addEventListener("click", (e) => {
     // Local file → open in Marka
     e.preventDefault();
     const absPath = currentFilePath ? resolvePath(href) : href;
-    renderFile(absPath);
+    navigateTo(absPath);
   }
 });
 
@@ -297,7 +346,7 @@ document.addEventListener("keydown", async (e) => {
     try {
       const result = await invoke("open_file_dialog");
       if (result) {
-        renderFile(result.path, result.content);
+        navigateTo(result.path, result.content);
       }
     } catch (err) {
       console.error("Failed to open file dialog:", err);
@@ -323,6 +372,12 @@ document.addEventListener("keydown", async (e) => {
   } else if (e.ctrlKey && e.code === "KeyT") {
     e.preventDefault();
     toggleTheme();
+  } else if (e.altKey && e.code === "ArrowLeft") {
+    e.preventDefault();
+    goBack();
+  } else if (e.altKey && e.code === "ArrowRight") {
+    e.preventDefault();
+    goForward();
   } else if (e.key === "Escape") {
     getCurrentWindow().close();
   }
@@ -333,7 +388,7 @@ async function checkCliArgs() {
   try {
     const matches = await getMatches();
     if (matches.args.file && matches.args.file.value) {
-      await renderFile(matches.args.file.value);
+      await navigateTo(matches.args.file.value);
       return true;
     }
   } catch (err) {
