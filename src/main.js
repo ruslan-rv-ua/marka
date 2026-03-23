@@ -333,7 +333,7 @@ contentEl.addEventListener("click", (e) => {
     // Local file → open in Marka
     e.preventDefault();
     const absPath = currentFilePath ? resolvePath(href) : href;
-    renderFile(absPath);
+    navigateTo(absPath);
   }
 });
 
@@ -343,7 +343,7 @@ document.addEventListener("keydown", async (e) => {
     try {
       const result = await invoke("open_file_dialog");
       if (result) {
-        renderFile(result.path, result.content);
+        navigateTo(result.path, result.content);
       }
     } catch (err) {
       console.error("Failed to open file dialog:", err);
@@ -369,6 +369,12 @@ document.addEventListener("keydown", async (e) => {
   } else if (e.ctrlKey && e.code === "KeyT") {
     e.preventDefault();
     toggleTheme();
+  } else if (e.altKey && e.code === "ArrowLeft") {
+    e.preventDefault();
+    goBack();
+  } else if (e.altKey && e.code === "ArrowRight") {
+    e.preventDefault();
+    goForward();
   } else if (e.key === "Escape") {
     getCurrentWindow().close();
   }
@@ -379,7 +385,7 @@ async function checkCliArgs() {
   try {
     const matches = await getMatches();
     if (matches.args.file && matches.args.file.value) {
-      await renderFile(matches.args.file.value);
+      await navigateTo(matches.args.file.value);
       return true;
     }
   } catch (err) {
