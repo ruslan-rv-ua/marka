@@ -23,7 +23,9 @@ async function navigateTo(filePath, content) {
     navHistory.push(filePath);
     historyIndex = navHistory.length - 1;
   }
-  return await renderFile(filePath, content);
+  const ok = await renderFile(filePath, content);
+  if (ok) announce(t("file.opened", { file: fileNameFromPath(filePath) }));
+  return ok;
 }
 
 async function goBack() {
