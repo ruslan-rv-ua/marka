@@ -29,10 +29,11 @@
 - 📖 **Markdown rendering** — headings, tables, lists, and blockquotes
 - 💻 **Code blocks** — syntax highlighting via [highlight.js](https://highlightjs.org/) with copy buttons
 - 🖼️ **Local media** — support for images, video, and audio from local paths
-- 🔗 **Navigation** — `.md` links open in-app; external URLs open in your browser
+- 🔗 **Navigation** — internal anchors (`#heading`), `.md` links open in-app; external URLs open in your browser
+- 🧭 **History** — navigate back and forward between opened files (Alt+Left/Right)
 - 🎨 **Theme toggle** — switch between dark and light modes (Ctrl+T)
-- 🔤 **Adjustable font** — 10–72px font size (Ctrl+= / Ctrl+-)
-- 📏 **Interface padding** — adjust horizontal padding (Ctrl+[ / Ctrl+])
+- 🔤 **Adjustable font** — 10–72px font size (Ctrl+= / Ctrl+- / Ctrl+0 to reset)
+- 📏 **Interface padding** — adjust horizontal padding (Ctrl+[ / Ctrl+ / Ctrl+0 to reset)
 - ⚙️ **Auto-save settings** — configuration is saved next to the executable
 - 📌 **File associations** — `.md` files can be opened directly with Marka
 - 💬 **CLI support** — `marka.exe path\to\file.md`
@@ -43,7 +44,8 @@ Marka is designed specifically for screen reader users, with first-class NVDA su
 
 - **Document structure** — main content uses `role="document"` for proper focus management and navigation
     - **Code block landmarks** — every `<pre>` block is a keyboard-accessible region with descriptive ARIA labels
-- **Dynamic notifications** — copy actions, theme changes, and errors are announced via `aria-live` regions
+- **Dynamic notifications** — file opening, copy actions, theme changes, and errors are announced via `aria-live` regions
+- **Anchor navigation** — fully supported structured document traversal for jumping between sections
 - **Error handling** — errors are marked with `role="alert"` for immediate announcement
 - **Keyboard navigation** — all features are accessible via keyboard; shortcuts use layout-independent keycodes
 - **Localization** — user interface adapts to Ukrainian or English based on system settings
@@ -88,17 +90,20 @@ This method automatically manages updates and persists your settings.
 
 - **File dialog:** Press **Ctrl+O** to browse for a `.md` file
 - **CLI:** `marka.exe C:\path\to\file.md`
-- **File association:** Double-click any `.md` file (automatically registered)
+- **Help screen:** Open Marka without providing a file to see the built-in usage guide and available shortcuts
 
 ### Keyboard Shortcuts
 
 | Shortcut | Action |
 |----------|--------|
 | **Ctrl+O** | Open file dialog |
+| **Alt+Left** | Open previous file in history |
+| **Alt+Right** | Open next file in history |
 | **Ctrl+=** or **Ctrl+NumpadAdd** | Increase font size (+1px, max 72px) |
 | **Ctrl+-** or **Ctrl+NumpadSubtract** | Decrease font size (-1px, min 10px) |
 | **Ctrl+[** | Decrease horizontal padding (-5%, min 0%) |
 | **Ctrl+]** | Increase horizontal padding (+5%, max 25%) |
+| **Ctrl+0** | Reset font size and padding to default |
 | **Ctrl+T** | Toggle dark/light theme |
 | **Escape** | Close the window |
 
