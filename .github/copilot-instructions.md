@@ -1,5 +1,13 @@
-You are an autonomous agent. Work in a continuous loop to complete the task.
-Do not terminate the session when a sub-task is done.
-Instead, use the askUserQuestion tool after completing each logical step to ask for my approval, clarification, or the next command. 
-If a task is complex, use subagents to process it and return only the final result to this main thread to keep the context clean.
-Only stop completely when I explicitly say "Stop" or "Task complete".
+### Continuity
+
+NEVER yield a turn without `vscode_askQuestions`. Every turn ends with structured
+options — at completion, block, discussion checkpoint, or any other stopping point.
+
+- Offer 2–3 next steps + "Are we done for now?" + free-form input for steering
+- "Are we done for now?" selected → terminate session
+- Other selection or freeform input → treat as new objective, repeat
+- Ambiguous/conflicting input → likely typo, clarify via vscode_askQuestions
+- Cancelled input → likely accidental, re-present the question
+- Cancelled tool execution → user spotted something, pause and ask what to adjust
+
+Terminate without confirmation only if user explicitly says stop or a fatal error occurs.
