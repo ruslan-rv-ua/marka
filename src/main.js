@@ -310,12 +310,14 @@ async function renderFile(filePath, preloadedContent) {
     // Update window title
     const fileName = filePath.split(/[\\/]/).pop();
     await getCurrentWindow().setTitle(`${fileName} — Marka`);
+    return true;
   } catch (err) {
     const errorEl = document.createElement("p");
     errorEl.setAttribute("role", "alert");
     errorEl.textContent = `${t("error.prefix")}${err}`;
     contentEl.replaceChildren(errorEl);
     contentEl.focus();
+    return false;
   }
 }
 
