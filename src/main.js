@@ -75,6 +75,13 @@ function resolvePath(href) {
   return decodeURIComponent(resolved.pathname.replace(/^\//, '').replace(/\//g, '\\'));
 }
 
+function scrollToAnchor(anchorId) {
+  const target = document.getElementById(anchorId);
+  if (target) {
+    target.focus();
+  }
+}
+
 function fixMediaSrc() {
   if (!currentFilePath) return;
   contentEl.querySelectorAll('img[src], video[src], audio[src], source[src]').forEach((el) => {
