@@ -110,7 +110,17 @@ const marked = new Marked(
       }
       return hljs.highlightAuto(code).value;
     },
-  })
+  }),
+  {
+    renderer: {
+      code({ text, lang }) {
+        const safeLang = lang ? lang.replace(/[^a-zA-Z0-9._+-]/g, "") : "";
+        const langAttr = safeLang ? ` data-lang="${safeLang}"` : "";
+        const langClass = safeLang ? `hljs language-${safeLang}` : "hljs";
+        return `<pre${langAttr}><code class="${langClass}">${text}</code></pre>\n`;
+      }
+    }
+  }
 );
 
 const contentEl = document.getElementById("content");
