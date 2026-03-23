@@ -398,6 +398,9 @@ document.addEventListener("keydown", async (e) => {
   } else if (e.ctrlKey && e.code === "NumpadSubtract") {
     e.preventDefault();
     changeFontSize(-1);
+  } else if (e.ctrlKey && e.code === "Digit0") {
+    e.preventDefault();
+    resetZoom();
   } else if (e.ctrlKey && e.code === "BracketLeft") {
     e.preventDefault();
     changePadding(-5);
