@@ -1,7 +1,7 @@
 # Design: Ctrl+0 — Reset Zoom
 
 **Date:** 2026-03-23
-**Status:** Approved
+**Status:** Draft
 
 ## Overview
 
@@ -39,6 +39,8 @@ function resetZoom() {
 }
 ```
 
+`root` is `document.documentElement`, defined at module scope. The codebase stores no JS-side state for font size or padding — both are read from computed CSS properties at call time, so a direct `setProperty` with hardcoded defaults is sufficient; no read is needed before writing.
+
 ### Keyboard Shortcut
 
 Add to the existing `keydown` event handler, alongside `Ctrl+=` / `Ctrl+-` cases:
@@ -52,7 +54,7 @@ if (e.ctrlKey && e.code === "Digit0") {
 
 Key notes:
 - Uses `event.code` (physical key position), consistent with all other shortcuts in the file.
-- `Numpad0` is intentionally excluded — `Ctrl+[` and `Ctrl+]` also have no numpad variants.
+- `Numpad0` is intentionally excluded. Rationale: `Ctrl+[`/`Ctrl+]` (padding) have no numpad variants, keeping reset consistent with padding shortcuts. Additionally, `Ctrl+Numpad0` is reserved by browsers/WebView2 as reset-zoom, so handling it would shadow host behaviour.
 - `scheduleSave()` persists the reset values to disk with the existing 1-second debounce.
 
 ## Behaviour
@@ -68,4 +70,4 @@ Settings are saved to disk after reset (same as all other zoom/padding changes).
 
 - Does NOT reset theme (dark/light).
 - Does NOT reset window size or position.
-- Does NOT add any visual indicator or announcement.
+- Does NOT add any NVDA `aria-live` announcement. Rationale: `Ctrl++`/`Ctrl+-` and `Ctrl+[`/`Ctrl+]` also produce no announcement — the effect is immediately perceptible through content reflow detectable by NVDA in browse mode. Adding an announcement only for reset would be inconsistent.
