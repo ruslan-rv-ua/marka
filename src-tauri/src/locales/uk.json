@@ -5,6 +5,7 @@
   "copy.success": "Код скопійовано",
   "copy.error": "Помилка копіювання",
   "code.label": "Код {index} — ",
+  "code.labelLang": "Код {index}: {lang}",
   "document.label": "Вміст документа",
   "error.prefix": "Помилка: ",
   "history.back": "Назад: {file}",

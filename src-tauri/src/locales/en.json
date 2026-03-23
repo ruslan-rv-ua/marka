@@ -5,6 +5,7 @@
   "copy.success": "Code copied",
   "copy.error": "Copy error",
   "code.label": "Code {index} — ",
+  "code.labelLang": "Code {index}: {lang}",
   "document.label": "Document content",
   "error.prefix": "Error: ",
   "history.back": "Back: {file}",
