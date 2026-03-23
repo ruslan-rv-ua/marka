@@ -333,6 +333,13 @@ contentEl.addEventListener("click", (e) => {
   const href = link.getAttribute("href");
   if (!href) return;
 
+  // Check if this is an anchor link
+  if (href.startsWith("#")) {
+    e.preventDefault();
+    scrollToAnchor(href.slice(1));
+    return;
+  }
+
   if (isExternal(href)) {
     // External URL → open in default browser
     e.preventDefault();
