@@ -283,7 +283,10 @@ async function renderFile(filePath, preloadedContent) {
 
       // ARIA accessibility for NVDA
       pre.setAttribute("role", "region");
-      pre.setAttribute("aria-label", t("code.label", { index: codeBlockIndex }));
+      const lang = pre.dataset.lang;
+      const labelKey = lang ? "code.labelLang" : "code.label";
+      const labelParams = lang ? { index: codeBlockIndex, lang } : { index: codeBlockIndex };
+      pre.setAttribute("aria-label", t(labelKey, labelParams));
       pre.setAttribute("tabindex", "0");
 
       // Copy button
@@ -347,7 +350,10 @@ async function showHelp() {
       if (pre.textContent.trim() === "") return;
       codeBlockIndex++;
       pre.setAttribute("role", "region");
-      pre.setAttribute("aria-label", t("code.label", { index: codeBlockIndex }));
+      const lang = pre.dataset.lang;
+      const labelKey = lang ? "code.labelLang" : "code.label";
+      const labelParams = lang ? { index: codeBlockIndex, lang } : { index: codeBlockIndex };
+      pre.setAttribute("aria-label", t(labelKey, labelParams));
       pre.setAttribute("tabindex", "0");
     });
 
