@@ -282,6 +282,16 @@ async function renderFile(filePath, preloadedContent) {
       wrapper.appendChild(btn);
     });
 
+    // Handle Enter key on anchor links
+    contentEl.querySelectorAll("a[href^='#']").forEach((link) => {
+      link.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          scrollToAnchor(link.getAttribute("href").slice(1));
+        }
+      });
+    });
+
     // Force NVDA browse mode by blurring and re-focusing the document container
     contentEl.blur();
     requestAnimationFrame(() => contentEl.focus());
