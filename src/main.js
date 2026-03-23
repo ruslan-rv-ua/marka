@@ -17,13 +17,13 @@ function fileNameFromPath(filePath) {
   return filePath.split(/[\\/]/).pop();
 }
 
-function navigateTo(filePath, content) {
+async function navigateTo(filePath, content) {
   if (!navigatingHistory) {
     navHistory.splice(historyIndex + 1);
     navHistory.push(filePath);
     historyIndex = navHistory.length - 1;
   }
-  return renderFile(filePath, content);
+  return await renderFile(filePath, content);
 }
 
 async function goBack() {
