@@ -9,5 +9,6 @@
   "error.prefix": "Error: ",
   "history.back": "Back: {file}",
   "history.forward": "Forward: {file}",
-  "history.empty": "No navigation history"
+  "history.empty": "No navigation history",
+  "file.opened": "Opened: {file}"
 }
