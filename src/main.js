@@ -130,8 +130,14 @@ const contentEl = document.getElementById("content");
 
 const root = document.documentElement;
 
+let cachedSettings = null;
+async function getSettings() {
+  if (!cachedSettings) cachedSettings = await invoke("load_settings");
+  return cachedSettings;
+}
+
 async function initializeLocale() {
-  const settings = await invoke("load_settings");
+  const settings = await getSettings();
 
   // Якщо локаль не встановлена — перший запуск
   if (!settings.locale || settings.locale === "") {
@@ -155,7 +161,7 @@ async function initializeLocale() {
 }
 
 async function applySettings() {
-  const s = await invoke("load_settings");
+  const s = await getSettings();
   root.style.setProperty("--font-size", `${s.fontSize}px`);
   root.style.setProperty("--padding-x", `${s.paddingX}%`);
   if (s.theme === "light") {
