@@ -207,6 +207,12 @@ let firstRender = true;
 
 const ANNOUNCE_TIMEOUT_MS = 3000;
 const SAVE_DEBOUNCE_MS = 1000;
+const BROWSE_MODE_REFRESH_DELAY_MS = 1000;
+
+function refreshNvdaBrowseMode() {
+  contentEl.blur();
+  requestAnimationFrame(() => contentEl.focus());
+}
 const FONT_SIZE_MIN = 10, FONT_SIZE_MAX = 72;
 const PADDING_MIN = 0, PADDING_MAX = 25;
 const DEFAULT_FONT_SIZE = 16; // px, matches :root --font-size in styles.css
@@ -322,12 +328,16 @@ async function renderFile(filePath, preloadedContent) {
       });
     });
 
-    // Force NVDA browse mode refresh on subsequent renders only.
-    // On the first render the window is still hidden (visible:false in tauri.conf);
-    // blur/focus here would make NVDA rebuild the virtual buffer twice.
-    if (!firstRender) {
-      contentEl.blur();
-      requestAnimationFrame(() => contentEl.focus());
+    // Force NVDA browse mode refresh. On subsequent renders do it immediately;
+    // on the first render defer past NVDA's initial virtual-buffer build so the
+    // cycle doesn't collide with indexing (that collision was the cold-start
+    // freeze). Without this deferred cycle NVDA stays half-attached: heading
+    // navigation works but ScrollIntoView doesn't fire until the user alt-tabs
+    // away and back.
+    if (firstRender) {
+      setTimeout(refreshNvdaBrowseMode, BROWSE_MODE_REFRESH_DELAY_MS);
+    } else {
+      refreshNvdaBrowseMode();
     }
     firstRender = false;
 
@@ -363,9 +373,10 @@ async function showHelp() {
       pre.setAttribute("tabindex", "0");
     });
 
-    if (!firstRender) {
-      contentEl.blur();
-      requestAnimationFrame(() => contentEl.focus());
+    if (firstRender) {
+      setTimeout(refreshNvdaBrowseMode, BROWSE_MODE_REFRESH_DELAY_MS);
+    } else {
+      refreshNvdaBrowseMode();
     }
     firstRender = false;
   } catch (err) {
