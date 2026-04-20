@@ -470,19 +470,24 @@ async function checkCliArgs() {
   return false;
 }
 
+// Reveal the window only after the initial content + ARIA are in place,
+// so NVDA builds its virtual buffer once against the final DOM. The `finally`
+// guarantees the window is shown even if initialization or rendering throws —
+// otherwise an error would leave `visible:false` stuck and the process
+// unreachable in the UI.
 try {
-  await initializeLocale();
-  await applySettings();
-} catch (err) {
-  console.error("Initialization failed:", err);
+  try {
+    await initializeLocale();
+    await applySettings();
+  } catch (err) {
+    console.error("Initialization failed:", err);
+  }
+  const fileOpened = await checkCliArgs();
+  if (!fileOpened) await showHelp();
+} finally {
+  try {
+    await getCurrentWindow().show();
+  } catch (err) {
+    console.error("Failed to show window:", err);
+  }
 }
-const fileOpened = await checkCliArgs();
-if (!fileOpened) await showHelp();
-
-// Reveal the window only after the initial content + ARIA are in place.
-// This prevents NVDA from building the virtual buffer against an empty <main>
-// and then rebuilding it again once content arrives — the source of the
-// 1.5–2 s cold-start freeze on documents with tables.
-const win = getCurrentWindow();
-await win.show();
-await win.setFocus();
