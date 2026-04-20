@@ -295,7 +295,7 @@ async function renderFile(filePath, preloadedContent) {
       codeBlockIndex++;
 
       // ARIA accessibility for NVDA
-      pre.setAttribute("role", "region");
+      pre.setAttribute("role", "figure");
       const lang = pre.dataset.lang;
       const labelKey = lang ? "code.labelLang" : "code.label";
       const labelParams = lang ? { index: codeBlockIndex, lang } : { index: codeBlockIndex };
@@ -371,7 +371,7 @@ async function showHelp() {
     contentEl.querySelectorAll("pre").forEach((pre) => {
       if (pre.textContent.trim() === "") return;
       codeBlockIndex++;
-      pre.setAttribute("role", "region");
+      pre.setAttribute("role", "figure");
       const lang = pre.dataset.lang;
       const labelKey = lang ? "code.labelLang" : "code.label";
       const labelParams = lang ? { index: codeBlockIndex, lang } : { index: codeBlockIndex };
