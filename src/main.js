@@ -369,8 +369,11 @@ async function showHelp() {
   }
 }
 
-// Handle clicks on links in Markdown content
-contentEl.addEventListener("click", (e) => {
+// Handle clicks on links in Markdown content.
+// Listener is attached to `document` (not `contentEl`) so NVDA does not announce
+// "clickable" on every descendant — see w3c/aria#1684.
+document.addEventListener("click", (e) => {
+  if (!contentEl.contains(e.target)) return;
   const link = e.target.closest("a");
   if (!link) return;
 
