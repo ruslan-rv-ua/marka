@@ -470,24 +470,11 @@ async function checkCliArgs() {
   return false;
 }
 
-// Reveal the window only after the initial content + ARIA are in place,
-// so NVDA builds its virtual buffer once against the final DOM. The `finally`
-// guarantees the window is shown even if initialization or rendering throws —
-// otherwise an error would leave `visible:false` stuck and the process
-// unreachable in the UI.
 try {
-  try {
-    await initializeLocale();
-    await applySettings();
-  } catch (err) {
-    console.error("Initialization failed:", err);
-  }
-  const fileOpened = await checkCliArgs();
-  if (!fileOpened) await showHelp();
-} finally {
-  try {
-    await getCurrentWindow().show();
-  } catch (err) {
-    console.error("Failed to show window:", err);
-  }
+  await initializeLocale();
+  await applySettings();
+} catch (err) {
+  console.error("Initialization failed:", err);
 }
+const fileOpened = await checkCliArgs();
+if (!fileOpened) await showHelp();
