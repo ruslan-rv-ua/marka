@@ -203,6 +203,7 @@ async function scheduleSave() {
 
 let pendingClearTimeout = null;
 let renderGeneration = 0;
+let firstRender = true;
 
 const ANNOUNCE_TIMEOUT_MS = 3000;
 const SAVE_DEBOUNCE_MS = 1000;
@@ -321,9 +322,14 @@ async function renderFile(filePath, preloadedContent) {
       });
     });
 
-    // Force NVDA browse mode by blurring and re-focusing the document container
-    contentEl.blur();
-    requestAnimationFrame(() => contentEl.focus());
+    // Force NVDA browse mode refresh on subsequent renders only.
+    // On the first render the window is still hidden (visible:false in tauri.conf);
+    // blur/focus here would make NVDA rebuild the virtual buffer twice.
+    if (!firstRender) {
+      contentEl.blur();
+      requestAnimationFrame(() => contentEl.focus());
+    }
+    firstRender = false;
 
     // Update window title
     const fileName = filePath.split(/[\\/]/).pop();
@@ -357,9 +363,11 @@ async function showHelp() {
       pre.setAttribute("tabindex", "0");
     });
 
-    // Force NVDA browse mode refresh
-    contentEl.blur();
-    requestAnimationFrame(() => contentEl.focus());
+    if (!firstRender) {
+      contentEl.blur();
+      requestAnimationFrame(() => contentEl.focus());
+    }
+    firstRender = false;
   } catch (err) {
     const errorEl = document.createElement("p");
     errorEl.setAttribute("role", "alert");
@@ -470,3 +478,11 @@ try {
 }
 const fileOpened = await checkCliArgs();
 if (!fileOpened) await showHelp();
+
+// Reveal the window only after the initial content + ARIA are in place.
+// This prevents NVDA from building the virtual buffer against an empty <main>
+// and then rebuilding it again once content arrives — the source of the
+// 1.5–2 s cold-start freeze on documents with tables.
+const win = getCurrentWindow();
+await win.show();
+await win.setFocus();
