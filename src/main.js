@@ -213,6 +213,19 @@ let firstRender = true;
 
 const ANNOUNCE_TIMEOUT_MS = 3000;
 const SAVE_DEBOUNCE_MS = 1000;
+// [TUNABLE: NVDA first-render browse-mode refresh delay]
+// On cold start, calling refreshNvdaBrowseMode() synchronously after
+// the first innerHTML insert interrupts NVDA's virtual-buffer build and
+// freezes the screen reader for 1.5-2 s (repro: docs/nvda_bug/buggy.md).
+// Skipping the refresh entirely leaves NVDA half-attached: heading `h`
+// navigation works but ScrollIntoView does not fire until the user
+// alt-tabs away and back.
+// The delay below is a compromise — long enough for NVDA to finish its
+// initial indexing, short enough that viewport scrolling becomes useful
+// within ~1 s of opening the file. Side effect: when the refresh fires,
+// NVDA resets its browse-mode cursor to document start.
+// If user asks to tune the delay or revisit the refresh strategy, this
+// constant and refreshNvdaBrowseMode() below are the handles to change.
 const BROWSE_MODE_REFRESH_DELAY_MS = 1000;
 
 function refreshNvdaBrowseMode() {
