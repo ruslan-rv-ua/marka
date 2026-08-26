@@ -1,10 +1,32 @@
 # Release Testing Guide — Tasks 5, 6, 7
 
+> [!WARNING]
+> **Частково застаріло: Scoop більше не оновлюється звідси.**
+>
+> Цей гайд писався для механізму, якого вже немає. `marka` слала
+> `repository_dispatch` до `scoop-bucket`, і для цього тримала секрет
+> `SCOOP_BUCKET_TOKEN`. Workflow `update-scoop.yml` видалено, крок
+> `Update Scoop bucket` із `release.yml` прибрано, секрет видалено.
+>
+> Тепер маніфест оновлює **сам bucket**: його workflow `Excavator` читає поля
+> `checkver` і `autoupdate` у `bucket/marka.json`, знаходить новий реліз і бере
+> хеш із `.sha256`. Запускається вручну з
+> [scoop-bucket → Actions → Excavator](https://github.com/ruslan-rv-ua/scoop-bucket/actions),
+> плюс раз на добу о 04:20 UTC.
+>
+> **Що з цього гайду ще правдиве:** усе про реліз як такий — збірка, ZIP, файл
+> `.sha256`, GitHub Release, поведінка pre-release тегів.
+> **Що вже ні:** кожен крок, що згадує `repository_dispatch`,
+> `update-scoop-manifest.yml` або очікування автоматичного оновлення bucket
+> після релізу. Зокрема Крок 4 у Task 5 і Крок 4 у Task 6.
+>
+> Гайд лишається як запис тієї перевірки, а не як інструкція до виконання.
+
 > Цей гайд описує як тестувати автоматичний CI/CD pipeline після налаштування токена (Tasks 2 & 3).
 
 **Статус:** Виконується ПІСЛЯ Tasks 2 & 3
 **Час:** ~20-30 хвилин (вкл. час очікування GitHub Actions)
-**Вимагається:** SCOOP_BUCKET_TOKEN налаштований у `marka` репозиторії
+**Вимагається:** ~~SCOOP_BUCKET_TOKEN налаштований у `marka` репозиторії~~ — жодних секретів; див. попередження вище
 
 ---
 

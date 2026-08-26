@@ -31,7 +31,7 @@ Current version: `0.1.0`
 **Automated Release Process:**
 - Tag: `git tag v0.1.0 && git push --tags`
 - Workflow: `.github/workflows/release.yml` (triggers automatically)
-- Output: GitHub Release + ZIP + SHA256 + Scoop bucket update
+- Output: GitHub Release + ZIP + SHA256. The Scoop manifest is **not** updated from here — see below
 
 **Manual Trigger (if automation fails):**
 - GitHub → Actions → Release → Run workflow
@@ -39,7 +39,7 @@ Current version: `0.1.0`
 
 **Pre-release Tags:**
 - `v0.1.0-alpha`, `v0.1.0-beta`, `v0.1.0-rc` → GitHub Release only
-- No Scoop update for pre-releases (stable bucket only)
+- Pre-releases never reach the bucket: `checkver` follows the repository's *latest release*, which GitHub does not set to a pre-release
 
 **Version Sync Required:**
 When bumping version, update all three files to same value:
@@ -51,8 +51,9 @@ Then: `git tag v{version} && git push --tags`
 
 **Scoop Integration:**
 - Manifest: `scoop-bucket/bucket/marka.json`
-- Auto-updated by `update-scoop-manifest.yml` on each stable release
-- Token: `SCOOP_BUCKET_TOKEN` (GitHub secret, stored in Actions)
+- Updated **by the bucket, not from here.** Its `Excavator` workflow reads the manifest's own `checkver` and `autoupdate`, finds the new release, builds the URL and lifts the hash from the `.sha256` sidecar, then commits the bump.
+- Run it by hand from [scoop-bucket → Actions → Excavator](https://github.com/ruslan-rv-ua/scoop-bucket/actions); it also runs daily at 04:20 UTC as a backstop. Pressing it is safe at any time — with nothing to update it does nothing.
+- **No secrets.** This repository sends the bucket nothing. `update-scoop.yml` and the `SCOOP_BUCKET_TOKEN` secret it needed are both gone: a PAT with write access to another repository has to be rotated and fails silently when it expires.
 
 ## Git Workflow
 
