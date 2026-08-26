@@ -114,18 +114,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Оновлення scoop-bucket пропускається для pre-release (будь-якого виду)
-      - name: Update Scoop bucket
-        if: ${{ !inputs.prerelease && !contains(github.ref, '-alpha') && !contains(github.ref, '-beta') && !contains(github.ref, '-rc') }}
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.SCOOP_BUCKET_TOKEN }}
-          repository: ruslan-rv-ua/scoop-bucket
-          event-type: update-${{ steps.info.outputs.APP_ID }}
-          client-payload: |
-            {
-              "app": "${{ steps.info.outputs.APP_ID }}",
-              "version": "${{ steps.info.outputs.VERSION }}",
-              "hash": "${{ steps.package.outputs.HASH }}",
-              "url": "https://github.com/${{ github.repository }}/releases/download/v${{ steps.info.outputs.VERSION }}/${{ steps.package.outputs.ZIP_NAME }}"
-            }
